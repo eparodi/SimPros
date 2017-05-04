@@ -1,7 +1,5 @@
-package tp2;
+package ProcessManager;
 import java.util.*;
-
-import tp2.UserLevelThread.ThreadState;
 
 public class KernelLevelThread {
 	
@@ -55,10 +53,10 @@ public class KernelLevelThread {
 			if (index < task_array.size()) {
 				running_task = task_array.get(index);
 				if (running_task.getType() == Task.Type.IO) {
-					state = ThreadState.BLOCKED;
+					state = UserLevelThread.ThreadState.BLOCKED;
 				}
 				else
-					state = ThreadState.FINISHED;
+					state = UserLevelThread.ThreadState.FINISHED;
 			}
 		}
 	}
