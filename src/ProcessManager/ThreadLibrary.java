@@ -1,8 +1,6 @@
 package ProcessManager;
 import java.util.*;
 
-//TODO: Quitar los enum y discutir la existencia filosofica de esta clase;
-@Deprecated
 public class ThreadLibrary {
 
 
