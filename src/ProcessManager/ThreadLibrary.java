@@ -1,19 +1,18 @@
 package ProcessManager;
 import java.util.*;
 
+//TODO: Quitar los enum y discutir la existencia filosofica de esta clase;
+@Deprecated
 public class ThreadLibrary {
 
-	public static enum Algorithm {
-		FIFO, RR, HRRN, SPN, SRT
-	}
+
 	
 	private long quantum;
-	private Algorithm algorithm;
-	
+	private Enum.Algorithm algorithm;
 	private Queue<UserLevelThread> ready_queue;
 	private UserLevelThread running_ult;			// Whether it's blocked or not.
 	
-	public ThreadLibrary(ArrayList<UserLevelThread> user_thread_array, Algorithm algorithm) {
+	public ThreadLibrary(ArrayList<UserLevelThread> user_thread_array, Enum.Algorithm algorithm) {
 		ready_queue = new LinkedList<>();
 		this.algorithm = algorithm;
 		
@@ -23,32 +22,32 @@ public class ThreadLibrary {
 		running_ult = ready_queue.poll();
 	}
 	
-	public ThreadLibrary(ArrayList<UserLevelThread> user_thread_array, Algorithm algorithm, long quantum) {
+	public ThreadLibrary(ArrayList<UserLevelThread> user_thread_array, Enum.Algorithm algorithm, long quantum) {
 		this(user_thread_array, algorithm);
 		this.quantum = quantum;
 	}
 	
-	public UserLevelThread.ThreadState getState() {
+	public Enum.ThreadState getState() {
 		if (running_ult == null)
-			return UserLevelThread.ThreadState.FINISHED;
+			return Enum.ThreadState.FINISHED;
 		return running_ult.getState();
 	}
 	
-	public Task.Device getDevice() {
+	public Enum.Device getDevice() {
 		return running_ult.getDevice();
 	}
 	
 	public void run() {
-		if (running_ult.getState() == UserLevelThread.ThreadState.BLOCKED) {
+		if (running_ult.getState() == Enum.ThreadState.BLOCKED) {
 			running_ult.run();
-			if (running_ult.getState() == UserLevelThread.ThreadState.FINISHED)
+			if (running_ult.getState() == Enum.ThreadState.FINISHED)
 				running_ult = ready_queue.poll();
 			return;
 		}
 		switch(algorithm) {
 			case FIFO: {
 				running_ult.run();
-				if (running_ult.getState() == UserLevelThread.ThreadState.FINISHED)
+				if (running_ult.getState() == Enum.ThreadState.FINISHED)
 					running_ult = ready_queue.poll();
 				break;
 			}

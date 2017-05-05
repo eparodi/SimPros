@@ -1,5 +1,5 @@
 package ProcessManager;
 
-public class Core {
 
+public class NewKLT {
 }

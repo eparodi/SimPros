@@ -4,59 +4,58 @@ import java.util.*;
 public class KernelLevelThread {
 	
 	private ThreadLibrary thread_library;
+	private ArrayList<Task> taskList;
+	private Enum.ThreadState state;
+	private Task runningTask;
+	private int index; 
 	
-	private ArrayList<Task> task_array;
-	private UserLevelThread.ThreadState state;
-	private Task running_task;
-	private int index;
-	
-	public KernelLevelThread(ArrayList<UserLevelThread> user_thread_array, ThreadLibrary.Algorithm algorithm) {
+	public KernelLevelThread(ArrayList<UserLevelThread> user_thread_array, Enum.Algorithm algorithm) {
 		thread_library = new ThreadLibrary(user_thread_array, algorithm);
 	}
 	
-	public KernelLevelThread(ArrayList<UserLevelThread> user_thread_array, ThreadLibrary.Algorithm algorithm, long quantum) {
+	public KernelLevelThread(ArrayList<UserLevelThread> user_thread_array, Enum.Algorithm algorithm, long quantum) {
 		thread_library = new ThreadLibrary(user_thread_array, algorithm, quantum);
 	}
-	
+
 	public KernelLevelThread(ArrayList<Task> task_array) {
-		this.task_array = task_array;
+		this.taskList = task_array;
 		index = 0;
-		running_task = task_array.get(index);
-		if (running_task.getType() == Task.Type.IO)
-			state = UserLevelThread.ThreadState.BLOCKED;
+		runningTask = task_array.get(index);
+		if (runningTask.getType() == Enum.Type.IO)
+			state = Enum.ThreadState.BLOCKED;
 		else
-			state = UserLevelThread.ThreadState.NONBLOCKED;
+			state = Enum.ThreadState.NONBLOCKED;
 	}
 	
-	public UserLevelThread.ThreadState getState() {
-		if (task_array == null)
+	public Enum.ThreadState getState() {
+		if (taskList == null)
 			return thread_library.getState();
 		else
 			return state;
 	}
 	
-	public Task.Device getDivice() {
-		if (task_array == null)
+	public Enum.Device getDevice() {
+		if (taskList == null)
 			return thread_library.getDevice();
 		else
-			return running_task.getDevice();
+			return runningTask.getDevice();
 	}
 	
 	public void run() {
-		if (task_array == null) {
+		if (taskList == null) {
 			thread_library.run();
 			return;
 		}
-		running_task.run();
-		if (running_task.isFinished()) {
+		runningTask.run();
+		if (runningTask.isFinished()) {
 			index ++;
-			if (index < task_array.size()) {
-				running_task = task_array.get(index);
-				if (running_task.getType() == Task.Type.IO) {
-					state = UserLevelThread.ThreadState.BLOCKED;
+			if (index < taskList.size()) {
+				runningTask = taskList.get(index);
+				if (runningTask.getType() == Enum.Type.IO) {
+					state = Enum.ThreadState.BLOCKED;
 				}
 				else
-					state = UserLevelThread.ThreadState.FINISHED;
+					state = Enum.ThreadState.FINISHED;
 			}
 		}
 	}

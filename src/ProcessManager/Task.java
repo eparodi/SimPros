@@ -1,31 +1,33 @@
 package ProcessManager;
-
 public class Task {
 
-	public static enum Type {
-		CPU, IO
-	}
-	public static enum Device {
-		IO1, IO2, IO3
-	}
 	
-	private int amount;
-	private Type type;
-	private Device divice;
-	
-	public Task(int amount, Device divice) {
+	public int amount;
+	public Enum.Type type;
+	public Enum.Device device;
+    public Enum.Job  job;
+
+    public Task(int amount, Enum.Job job){
+        this.amount=amount;
+        this.job=job;
+    }
+
+    @Deprecated
+	public Task(int amount, Enum.Device device) {
 		this.amount = amount;
-		this.type = Type.IO;
-		this.divice = divice;
+		this.type = Enum.Type.IO;
+		this.device = device;
+
 	}
-	
+
+	@Deprecated
 	public Task(int amount) {
 		this.amount = amount;
-		this.type = Type.CPU;
+		this.type = Enum.Type.CPU;
 	}
 	
 	public void run() {
-		amount = amount - 1;
+	    amount = amount - 1;
 	}
 	
 	public boolean isFinished() {
@@ -33,17 +35,18 @@ public class Task {
 			return false;
 		return true;
 	}
-	
+	@Deprecated
 	public int getAmount() {
 		return amount;
 	}
-	
-	public Type getType() {
+	@Deprecated
+	public Enum.Type getType() {
 		return type;
 	}
-	
-	public Device getDevice() {
-		return divice;
+	@Deprecated
+	public Enum.Device getDevice() {
+		return device;
 	}
-	
+
+
 }
