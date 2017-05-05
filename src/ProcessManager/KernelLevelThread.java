@@ -33,7 +33,8 @@ public class KernelLevelThread {
 		else
 			return state;
 	}
-	
+
+	@Deprecated
 	public Enum.Device getDevice() {
 		if (taskList == null)
 			return thread_library.getDevice();

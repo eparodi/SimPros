@@ -2,10 +2,10 @@ package ProcessManager;
 public class Task {
 
 	
-	public int amount;
-	public Enum.Type type;
-	public Enum.Device device;
-    public Enum.Job  job;
+	protected int amount;
+    protected Enum.Type type;
+    protected Enum.Device device;
+    protected Enum.Job  job;
 
     public Task(int amount, Enum.Job job){
         this.amount=amount;

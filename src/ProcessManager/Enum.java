@@ -12,7 +12,7 @@ public class Enum {
         CPU, IO1, IO2, IO3
     }
     public static enum ThreadState {
-        NONBLOCKED, BLOCKED, FINISHED
+        READY, NONBLOCKED, BLOCKED, FINISHED
     }
 
     public static enum Algorithm {
