@@ -5,9 +5,9 @@ public class Task {
 	protected int amount;
     protected Enum.Type type;
     protected Enum.Device device;
-    protected Enum.Job  job; //TODO
+    protected Enum.Job  job;
 
-	//TODO
+
     public Task(int amount, Enum.Job job){
         this.amount=amount;
         this.job=job;
