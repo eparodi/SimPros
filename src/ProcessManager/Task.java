@@ -12,19 +12,19 @@ public class Task {
         this.amount=amount;
         this.job=job;
     }
-
+    @Deprecated
 	public Task(int amount, Enum.Device device) {
 		this.amount = amount;
 		this.type = Enum.Type.IO;
 		this.device = device;
 
 	}
-
+    @Deprecated
 	public Task(int amount) {
 		this.amount = amount;
 		this.type = Enum.Type.CPU;
 	}
-	
+
 	public void run() {
 	    amount = amount - 1;
 	}
@@ -34,12 +34,15 @@ public class Task {
 			return false;
 		return true;
 	}
+    @Deprecated
 	public int getAmount() {
 		return amount;
 	}
+    @Deprecated
 	public Enum.Type getType() {
 		return type;
 	}
+    @Deprecated
 	public Enum.Device getDevice() {
 		return device;
 	}

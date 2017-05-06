@@ -1,6 +1,9 @@
-package ProcessManager;
-import java.util.*;
+package ProcessManager.jUNK;
+import ProcessManager.Enum;
+import ProcessManager.Task;
 
+import java.util.*;
+@Deprecated
 public class UserLevelThread {
 
 	private ArrayList<Task> taskList;

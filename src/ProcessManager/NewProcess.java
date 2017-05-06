@@ -1,14 +1,10 @@
 package ProcessManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.*;
+//TODO: pensa que hacer con esto che...
 public class NewProcess {
     private int processID;
-    private List<KernelLevelThread> kernelThreadsList;
+    private int respawn; //Momento del que respawnea este
 
-    public NewProcess(List<KernelLevelThread> kernelThreadsList){
-        this.kernelThreadsList= kernelThreadsList;
-    }
 
 }

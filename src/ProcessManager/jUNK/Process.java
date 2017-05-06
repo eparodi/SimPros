@@ -1,6 +1,9 @@
-package ProcessManager;
+package ProcessManager.jUNK;
+import ProcessManager.Enum;
+
 import java.util.*;
 
+@Deprecated
 public class Process {
 
 	private int processID;
