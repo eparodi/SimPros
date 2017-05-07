@@ -1,14 +1,18 @@
 package ProcessManager;
 
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 public class NodeIO {
     protected int processID;
-    protected NewKLT klt;
+    protected KLT klt;
     protected Enum.Job ioID;
     protected int amount;
 
-    public NodeIO(int processID, NewKLT klt, Enum.Job ioID,int amount){
-        //TODO: comprobar que no se crea uno roto
+    public NodeIO(int processID, KLT klt, Enum.Job ioID, int amount) throws InvalidArgumentException{
+        if(amount<=0 || processID<=0 || klt==null) {
+            throw new InvalidArgumentException(new String[]{"Invalid NodeIO"});
+        }
         this.processID=processID;
         this.klt=klt;
         this.ioID=ioID;

@@ -1,7 +1,5 @@
 package ProcessManager;
 
-import sun.nio.ch.Net;
-
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -9,14 +7,13 @@ public class Scheduler {
     int processorUnits=1; //1,2
     int quantum=-1; //-1 cuando es FIFO
 
-    List<NewKLT> kltList;
+    List<KLT> kltList;
     List<Queue<NodeIO>> ioList;
+    Queue<KLT> readyQueue;
 
-    Queue<NewKLT> readyQueue;
-    Queue<NewKLT> blockedQueue; //TODO: delete this, is shit;
-    Enum.Algorithm algorithmMode; //TODO: please delete this shit
 
-    public Scheduler(int processorUnits,List<NewKLT> kltList, int quantum){
+
+    public Scheduler(int processorUnits, List<KLT> kltList, int quantum){
         this.processorUnits=processorUnits;
         this.kltList=kltList;
         this.quantum=quantum;
@@ -28,7 +25,7 @@ public class Scheduler {
 
     public void run(){
         for(int i=0;i<100;i++){ //TODO: Arreglar esta magia negra
-            for(NewKLT k: kltList){ //mete en cola de listos los klt nuevos
+            for(KLT k: kltList){ //mete en cola de listos los klt nuevos
                 if(k.respawn==i){
                     readyQueue.add(k);
                 }
@@ -48,7 +45,7 @@ public class Scheduler {
             }
             //BEGIN: proceso
             for(int core=0;core<processorUnits;core++){
-                NewKLT toExecute=readyQueue.peek();
+                KLT toExecute=readyQueue.peek();
                 if(toExecute==null){
                     continue;
                 }

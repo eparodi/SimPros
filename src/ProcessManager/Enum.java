@@ -2,21 +2,21 @@ package ProcessManager;
 
 
 public class Enum {
-    @Deprecated
-    public static enum Type {
-        CPU, IO
-    }
-    @Deprecated
-    public static enum Device {
-        IO1, IO2, IO3
-    }
     public static enum Job{
         CPU, IO1, IO2, IO3
     }
     public static enum ThreadState {
-        READY, NONBLOCKED, BLOCKED, FINISHED
+        READY, BLOCKED, FINISHED
     }
+    @Deprecated
     public static enum Algorithm {
         FIFO, RR, HRRN, SPN, SRT
     }
+    /*
+    * SPN SomePreciousNullObject WHO KNOWS
+    * SRT SHORTER REMAINING TIME
+    * HRRN highest response ratio next
+    * RR robin
+    * FIFO trivial
+    * */
 }
