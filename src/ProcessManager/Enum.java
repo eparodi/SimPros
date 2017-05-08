@@ -10,7 +10,7 @@ public class Enum {
     }
     @Deprecated
     public static enum Algorithm {
-        FIFO, RR, HRRN, SPN, SRT
+        FIFO, RR, HRRN, SPN, SRT;
     }
     /*
     * SPN como el SRT pero no "empuja los procesos en ejecuccion"
