@@ -7,4 +7,7 @@ public class ExecutionDetail {
         this.kltID=kltID;
         this.ultID=ultID;
     }
+    public String toString(){
+        return "Executed: "+String.valueOf(kltID)+","+String.valueOf(ultID);
+    }
 }

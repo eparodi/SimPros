@@ -18,6 +18,14 @@ public class Scheduler {
     List<Queue<NodeIO>> ioList;
     Queue<KLT> readyQueue;
 
+    public boolean isFinished(){
+        for(KLT k: kltList){
+            if(!k.isFinished()){
+                return false;
+            }
+        }
+        return true;
+    }
 
 
 
@@ -29,7 +37,7 @@ public class Scheduler {
 
         ioList=new ArrayList<>(3);
         for(int i=0;i<3;i++){
-            ioList.add(i, new LinkedBlockingQueue<>());
+            ioList.add(i,new LinkedBlockingQueue<>());
         }
     }
 
@@ -67,9 +75,23 @@ public class Scheduler {
             KLT toExecute = readyQueue.peek(); //TODO IMP
             //ans.add(new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(0)), lkQe(ioList.get(0)),new ArrayList<>(1)));
             if (toExecute == null) {
-                break;
+                if(isFinished()){
+                    break;
+                }
+                ArrayList<ExecutionDetail> exeList=new ArrayList<>(1);
+                exeList.add(new ExecutionDetail(0,0));
+                System.out.println(new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList)); //TODO SACAR
+                ans.add(new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList));
+                continue;
             }
             else {
+                if(toExecute.state!= Enum.ThreadState.READY){
+                    ArrayList<ExecutionDetail> exeList=new ArrayList<>(1);
+                    exeList.add(new ExecutionDetail(0,0));
+                    System.out.println(new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList)); //TODO SACAR
+                    ans.add(new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList));
+                    continue;
+                }
                 NodeIO node;
                 node = toExecute.run();
                 if(node.ioID != Enum.Job.CPU){
@@ -80,8 +102,7 @@ public class Scheduler {
                     } else if (node.ioID == Enum.Job.IO3) {
                         ioList.get(2).add(new NodeIO(node.klt,node.ultID,Enum.Job.IO1,node.amount));
                     }
-                    KLT cache=readyQueue.remove();
-                    readyQueue.add(cache);
+                    readyQueue.remove();
                 }else{
                     if(toExecute.isFinished()){
                         readyQueue.remove();
@@ -89,7 +110,8 @@ public class Scheduler {
                 }
                 ArrayList<ExecutionDetail> exeList=new ArrayList<>(1);
                 exeList.add(new ExecutionDetail(node.klt.kltID,node.ultID));
-                ans.add(new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(0)),lkQe(ioList.get(0)),exeList));
+                System.out.println(new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList)); //TODO SACAR
+                ans.add(new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList));
             }
 
             //}

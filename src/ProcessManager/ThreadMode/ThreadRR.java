@@ -51,6 +51,9 @@ public class ThreadRR extends KLT{
             readyQueue.remove();
             readyQueue.add(toRunNow);
         }
+//        if(readyQueue.size()==0){
+//            state= Enum.ThreadState.FINISHED;
+//        }
         return new NodeIO(this,toRunNow.ultID,resp.typeJob,resp.amount);
     }
 }
