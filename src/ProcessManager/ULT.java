@@ -9,8 +9,12 @@ public class ULT {
     private ArrayList<Task> taskList;
     protected int runningTask;
     protected int waitingTime;
+    protected int kltID;
+    public int ultID;
 
-    public ULT(ArrayList<Task> taskList) {
+    public ULT(int kltID,int ultID,ArrayList<Task> taskList) {
+        this.kltID=kltID;
+        this.ultID=ultID;
         this.taskList = taskList;
         this.runningTask = 0;
         this.waitingTime = 0;
@@ -46,18 +50,13 @@ public class ULT {
         if(this.isFinished()){
             throw new NotRunneableThread("Cant run a finished ULT");
         }
-        try{
-            taskToRun=taskList.get(runningTask);
-        }catch(IndexOutOfBoundsException e){
-            runningTask=-1;
-            return new Response(0);
-        }
+        taskToRun=taskList.get(runningTask);
         waitingTime=0;
         if(taskToRun.job!= Enum.Job.CPU){
             int amountToSend=taskToRun.amount;
             taskToRun.amount=0;
             runningTask++;
-            return new Response(taskToRun.job,amountToSend,0); //Este caso nunca deberia pasar;
+            return new Response(kltID,ultID,taskToRun.job,amountToSend,0); //Este caso nunca deberia pasar;
         }else{
             taskToRun.amount=taskToRun.amount-1;
             if(taskToRun.amount==0){
@@ -68,11 +67,11 @@ public class ULT {
                         int amountToSend = taskToRun.amount;
                         taskToRun.amount = 0;
                         runningTask++;
-                        return new Response(taskToRun.job,amountToSend,1);
+                        return new Response(kltID,ultID,taskToRun.job,amountToSend,1);
                     }
                 }
             }
-            return new Response(1);
+            return new Response(kltID,ultID,1);
         }
     }
 }

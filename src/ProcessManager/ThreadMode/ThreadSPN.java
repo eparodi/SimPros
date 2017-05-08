@@ -4,18 +4,21 @@ package ProcessManager.ThreadMode;
 import ProcessManager.Enum;
 import ProcessManager.Exceptions.NotRunneableThread;
 import ProcessManager.KLT;
+import ProcessManager.NodeIO;
 import ProcessManager.Response.Response;
 import ProcessManager.ULT;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.ArrayList;
 
 public class ThreadSPN extends KLT{
 
-    public ThreadSPN(int processID, ArrayList<ULT> ultList) {
-        super(processID, ultList);
+
+    public ThreadSPN(int processID, int kltID, ArrayList<ULT> ultList) {
+        super(processID, kltID, ultList);
     }
 
-    public Response run() throws NotRunneableThread {
+    public NodeIO run() throws NotRunneableThread, InvalidArgumentException {
         if(state!= Enum.ThreadState.READY){
             throw new NotRunneableThread();
         }
@@ -37,6 +40,6 @@ public class ThreadSPN extends KLT{
         if(resp.typeJob!= Enum.Job.CPU){
             state= Enum.ThreadState.BLOCKED;
         }
-        return resp;
+        return new NodeIO(this,toRunNow.ultID,resp.typeJob,resp.amount);
     }
 }

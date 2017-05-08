@@ -4,8 +4,10 @@ package ProcessManager.ThreadMode;
 import ProcessManager.Enum;
 import ProcessManager.Exceptions.NotRunneableThread;
 import ProcessManager.KLT;
+import ProcessManager.NodeIO;
 import ProcessManager.Response.Response;
 import ProcessManager.ULT;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.ArrayList;
 import java.util.Queue;
@@ -16,13 +18,15 @@ public class ThreadRR extends KLT{
     private int usedQuantum=0; //es lo que usa en la ejecucion
     private int quantum; //Es el definido
 
-    public ThreadRR(int processID, ArrayList<ULT> ultList, int quantum) {
-        super(processID, ultList);
+    public ThreadRR(int processID, int kltID, ArrayList<ULT> ultList,int quantum) {
+        super(processID, kltID, ultList);
         readyQueue=new LinkedBlockingQueue<>(ultList);
         this.quantum=quantum;
     }
 
-    public Response run() throws NotRunneableThread {
+
+
+    public NodeIO run() throws NotRunneableThread, InvalidArgumentException {
         if(state!= Enum.ThreadState.READY){
             throw new NotRunneableThread();
         }
@@ -47,6 +51,6 @@ public class ThreadRR extends KLT{
             readyQueue.remove();
             readyQueue.add(toRunNow);
         }
-        return resp;
+        return new NodeIO(this,toRunNow.ultID,resp.typeJob,resp.amount);
     }
 }
