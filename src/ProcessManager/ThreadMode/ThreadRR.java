@@ -45,7 +45,7 @@ public class ThreadRR extends KLT{
         }
         if(toRunNow.isFinished()){
             readyQueue.remove();
-        }else if(quantum==usedQuantum){
+        }else if(quantum<=usedQuantum){
             usedQuantum=0;
             readyQueue.remove();
             readyQueue.add(toRunNow);
