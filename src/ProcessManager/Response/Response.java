@@ -3,9 +3,9 @@ package ProcessManager.Response;
 import ProcessManager.Enum;
 
 public class Response {
-    protected Enum.Job typeJob;
-    protected int amount;
-    protected int processed;
+    public Enum.Job typeJob;
+    public int amount;
+    public int processed;
 
     public Response(int processed){
         this.typeJob= Enum.Job.CPU;

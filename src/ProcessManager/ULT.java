@@ -27,7 +27,7 @@ public class ULT {
         return 1+(waitingTime/remainingRunTime());
     }
 
-    public int remainingRunTime(){
+    public int remainingRunTime(){ //aa
         int acumulator=0;
         for(Task t: taskList){ //TODO fijarse si van los devices
             if(t.job==Enum.Job.CPU) {
@@ -57,7 +57,7 @@ public class ULT {
             int amountToSend=taskToRun.amount;
             taskToRun.amount=0;
             runningTask++;
-            return new Response(taskToRun.job,amountToSend,0);
+            return new Response(taskToRun.job,amountToSend,0); //Este caso nunca deberia pasar;
         }else{
             taskToRun.amount=taskToRun.amount-1;
             if(taskToRun.amount==0){

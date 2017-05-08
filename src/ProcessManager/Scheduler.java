@@ -12,7 +12,6 @@ public class Scheduler {
     Queue<KLT> readyQueue;
 
 
-
     public Scheduler(int processorUnits, List<KLT> kltList, int quantum){
         this.processorUnits=processorUnits;
         this.kltList=kltList;

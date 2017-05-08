@@ -13,7 +13,7 @@ public class Enum {
         FIFO, RR, HRRN, SPN, SRT
     }
     /*
-    * SPN SomePreciousNullObject WHO KNOWS
+    * SPN como el SRT pero no "empuja los procesos en ejecuccion"
     * SRT SHORTER REMAINING TIME
     * HRRN highest response ratio next
     * RR robin
