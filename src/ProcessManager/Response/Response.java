@@ -3,6 +3,8 @@ package ProcessManager.Response;
 import ProcessManager.Enum;
 
 public class Response {
+    public int ultID;
+    public int kltID;
     public Enum.Job typeJob;
     public int amount;
     public int processed;

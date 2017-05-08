@@ -29,7 +29,7 @@ public class ULT {
 
     public int remainingRunTime(){ //aa
         int acumulator=0;
-        for(Task t: taskList){ //TODO fijarse si van los devices
+        for(Task t: taskList){ //TODO fijarse si van los devices, segun ELISEO si van los devices
             if(t.job==Enum.Job.CPU) {
                 acumulator = t.amount;
             }
