@@ -30,7 +30,7 @@ public class ThreadHRRN extends KLT{
         double prCandidate=1;
         for(ULT u: ultList){
             if(!u.isFinished()){
-                if(u.priority()<prCandidate){
+                if(u.priority()<=prCandidate){
                     toRunNow=u;
                     prCandidate=u.priority();
                 }

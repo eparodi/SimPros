@@ -6,13 +6,13 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.*;
 
-public class KLT {
+public abstract class KLT {
     protected int processID; //Ya que no existe el proceso, al menos dejo un identificador
     protected int kltID;
     protected int inCore;
     protected int respawn; //El momento que el proceso respawnea VER QUE ES EL MISMO PARA TODOs LOS PROCESOS
     protected ArrayList<ULT> ultList; //Un KLT minimamnet eva tenr un ULT, esta es la lista que las contiene de manera desordenada
-    protected Enum.ThreadState state;
+    protected Enum.ThreadState state=Enum.ThreadState.READY;
     private int runningUserThread;
 
     public KLT(int processID, int kltID, ArrayList<ULT> ultList) {
@@ -28,20 +28,11 @@ public class KLT {
         }
     }
 
-    public NodeIO run() throws NotRunneableThread, InvalidArgumentException {
-        if(state!=Enum.ThreadState.READY){
-            throw new NotRunneableThread();
-        }
-        if(this.isFinished()){
-            throw new NotRunneableThread("Cant run finished KLT");
-        }
-        //waiting();
-        return null;
-    }
+    public abstract NodeIO run() throws NotRunneableThread, InvalidArgumentException;
 
     public boolean isFinished(){
         for(ULT u: ultList){
-            if(u.runningTask !=-1){
+            if(!u.isFinished()){
                 return false;
             }
         }

@@ -7,6 +7,7 @@ import ProcessManager.Response.Response;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Scheduler {
@@ -24,6 +25,8 @@ public class Scheduler {
         this.processorUnits=processorUnits;
         this.kltList=kltList;
         this.quantum=quantum;
+        this.readyQueue= new LinkedBlockingQueue<KLT>();
+
         ioList=new ArrayList<>(3);
         for(int i=0;i<3;i++){
             ioList.add(i, new LinkedBlockingQueue<>());
@@ -79,6 +82,10 @@ public class Scheduler {
                     }
                     KLT cache=readyQueue.remove();
                     readyQueue.add(cache);
+                }else{
+                    if(toExecute.isFinished()){
+                        readyQueue.remove();
+                    }
                 }
                 ArrayList<ExecutionDetail> exeList=new ArrayList<>(1);
                 exeList.add(new ExecutionDetail(node.klt.kltID,node.ultID));

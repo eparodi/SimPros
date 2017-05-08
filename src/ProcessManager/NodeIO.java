@@ -9,7 +9,7 @@ public class NodeIO {
     protected Enum.Job ioID;
     protected int amount;
 
-    public NodeIO(KLT klt,int ultID, Enum.Job ioID, int amount) throws InvalidArgumentException{
+    public NodeIO(KLT klt,int ultID, Enum.Job ioID, int amount){
         this.klt=klt;
         this.ultID=ultID;
         this.ioID=ioID;
