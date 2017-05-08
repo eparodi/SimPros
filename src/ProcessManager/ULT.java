@@ -28,10 +28,10 @@ public class ULT {
     }
 
     public double priority(){
-        return 1+(waitingTime/remainingRunTime());
+        return 1+(waitingTime/ remainingRuntime());
     }
 
-    public int remainingRunTime(){ //aa
+    public int remainingRuntime(){ //aa
         int acumulator=0;
         for(Task t: taskList){ //TODO fijarse si van los devices, segun ELISEO si van los devices
             if(t.job==Enum.Job.CPU) {

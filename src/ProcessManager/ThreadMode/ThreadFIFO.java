@@ -41,9 +41,9 @@ public class ThreadFIFO extends KLT {
         if(toRunNow.isFinished()){
             readyQueue.remove();
         }
-//        if(readyQueue.size()==0){
-//            state= Enum.ThreadState.FINISHED;
-//        }
+        if(readyQueue.size()==0){
+            state= Enum.ThreadState.FINISHED;
+        }
         return new NodeIO(this,toRunNow.ultID,resp.typeJob,resp.amount);
     }
 

@@ -27,8 +27,6 @@ public class Scheduler {
         return true;
     }
 
-
-
     public Scheduler(int processorUnits, List<KLT> kltList, int quantum){
         this.processorUnits=processorUnits;
         this.kltList=kltList;

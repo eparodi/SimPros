@@ -29,9 +29,9 @@ public class ThreadSPN extends KLT{
         int remainingCandidate=1000;//TODO magic numberssss
         for(ULT u: ultList){
             if(!u.isFinished()){
-                if(u.remainingRunTime()<remainingCandidate){
+                if(u.remainingRuntime()<remainingCandidate){
                     toRunNow=u;
-                    remainingCandidate=u.remainingRunTime();
+                    remainingCandidate=u.remainingRuntime();
                 }
             }
         }

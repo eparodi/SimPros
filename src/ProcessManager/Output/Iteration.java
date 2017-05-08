@@ -20,10 +20,6 @@ public class Iteration {
     }
     @Override
     public String toString(){
-        //ret.concat();
-        //ret.concat(io2.toString());
-        //ret.concat(io3.toString());
-        //ret.concat(exDetail.toString());
-        return exDetail.toString()+" IO:"+io1.toString()+" "+io2.toString()+" "+io3.toString();
+         return exDetail.toString()+" IO1:"+io1.toString()+" IO2:"+io2.toString()+" IO3:"+io3.toString();
     }
 }

@@ -45,15 +45,15 @@ public class ThreadRR extends KLT{
         }
         if(toRunNow.isFinished()){
             readyQueue.remove();
+        }else if(quantum==usedQuantum){
             usedQuantum=0;
-        }
-        if(quantum==usedQuantum){
             readyQueue.remove();
             readyQueue.add(toRunNow);
         }
-//        if(readyQueue.size()==0){
-//            state= Enum.ThreadState.FINISHED;
-//        }
+
+        if(readyQueue.size()==0){
+            state= Enum.ThreadState.FINISHED;
+        }
         return new NodeIO(this,toRunNow.ultID,resp.typeJob,resp.amount);
     }
 }

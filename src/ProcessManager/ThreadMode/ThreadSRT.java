@@ -31,9 +31,9 @@ public class ThreadSRT extends KLT {
             for(int i=0;i<ultList.size();i++){
                 ULT u=ultList.get(i);
                 if(!u.isFinished()){
-                    if(u.remainingRunTime()<remainingCandidate){
+                    if(u.remainingRuntime()<remainingCandidate){
                         toRunNow=u;
-                        remainingCandidate=u.remainingRunTime();
+                        remainingCandidate=u.remainingRuntime();
                     }
                 }
             }

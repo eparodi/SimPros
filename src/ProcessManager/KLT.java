@@ -13,14 +13,12 @@ public abstract class KLT {
     protected int respawn; //El momento que el proceso respawnea VER QUE ES EL MISMO PARA TODOs LOS PROCESOS
     protected ArrayList<ULT> ultList; //Un KLT minimamnet eva tenr un ULT, esta es la lista que las contiene de manera desordenada
     protected Enum.ThreadState state=Enum.ThreadState.READY;
-    private int runningUserThread;
 
     public KLT(int processID, int kltID, ArrayList<ULT> ultList) {
         this.processID=processID;
         this.kltID=kltID;
         this.ultList=ultList;
     }
-
 
     protected void waiting(){
         for(ULT u: ultList){

@@ -8,6 +8,6 @@ public class ExecutionDetail {
         this.ultID=ultID;
     }
     public String toString(){
-        return "Executed: "+String.valueOf(kltID)+","+String.valueOf(ultID);
+        return "Ex:"+String.valueOf(kltID)+","+String.valueOf(ultID);
     }
 }
