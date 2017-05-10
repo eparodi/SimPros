@@ -15,4 +15,17 @@ public class NodeIO {
         this.ioID=ioID;
         this.amount=amount;
     }
+
+    public void consume(){
+        if(amount>0){
+            amount=amount-1;
+        }
+    }
+
+    public boolean isFinished(){
+        if(amount>0){
+            return false;
+        }
+        return true;
+    }
 }

@@ -29,6 +29,9 @@ public abstract class KLT {
     public abstract NodeIO run() throws NotRunneableThread, InvalidArgumentException;
 
     public boolean isFinished(){
+        if(ultList.size()==0){
+            return true;
+        }
         for(ULT u: ultList){
             if(!u.isFinished()){
                 return false;
