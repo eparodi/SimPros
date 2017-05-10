@@ -1,6 +1,8 @@
 package ProcessManager.Output;
 
 public class ExecutionDetail {
+
+    //todo FALTA EL IDENTIFICADOR DEL PROCESO
     int kltID;
     int ultID;
     public ExecutionDetail(int kltID, int ultID){

@@ -10,13 +10,17 @@ import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+//todo: imeplementar addprocess, dejamos a lo Linux los KLT manda.
+//todo:
 public class Scheduler {
-    int processorUnits=1; //1,2
-    int quantum=-1; //-1 cuando es FIFO
+    private int processIndex=1;
 
-    List<KLT> kltList;
-    List<Queue<NodeIO>> ioList;
-    Queue<KLT> readyQueue;
+    private int processorUnits=1; //1,2
+    private int quantum=-1; //-1 cuando es FIFO
+
+    private List<KLT> kltList;
+    private List<Queue<NodeIO>> ioList;
+    private Queue<KLT> readyQueue;
 
     public boolean isFinished(){
         for(KLT k: kltList){
