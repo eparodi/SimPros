@@ -7,7 +7,7 @@ public class NodeIO {
     protected KLT klt;
     protected int ultID;
     protected Enum.Job ioID;
-    protected int amount;
+    private int amount;
 
     public NodeIO(KLT klt,int ultID, Enum.Job ioID, int amount){
         this.klt=klt;

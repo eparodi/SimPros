@@ -8,18 +8,46 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
-//todo: imeplementar addprocess, dejamos a lo Linux los KLT manda.
-//todo:
+
+
 public class Scheduler {
-    private int processIndex=1;
-    List<Iteration> ans;
+
+    private int processIndex=1; //todo: para el addprocessor
+    private int kltIndex=1;
+
+
 
     private int processorUnits=1; //1,2
     private int quantum=-1; //-1 cuando es FIFO
+    private List<Integer> usedQuantum=new ArrayList<>(2);
+
 
     private List<KLT> kltList;
+    private List<Iteration> ans;
     private List<Queue<NodeIO>> ioList;
+    @Deprecated
     private Queue<KLT> readyQueue;
+    private List<Queue<KLT>> readyListQ;
+
+
+    public Scheduler(int processorUnits, List<KLT> kltList, int quantum){
+        this.processorUnits=processorUnits;
+        this.kltList=kltList;
+        this.quantum=quantum;
+        //this.readyQueue= new LinkedBlockingQueue<>();
+
+        this.readyListQ= new ArrayList<>(2);
+        this.readyListQ.add(new LinkedBlockingQueue<>());
+        this.readyListQ.add(new LinkedBlockingQueue<>());
+
+        this.usedQuantum.add(0);
+        this.usedQuantum.add(0);
+
+        ioList=new ArrayList<>(3);
+        for(int i=0;i<3;i++){
+            ioList.add(i,new LinkedBlockingQueue<>());
+        }
+    }
 
     public boolean isFinished(){
         for(KLT k: kltList){
@@ -29,19 +57,6 @@ public class Scheduler {
         }
         return true;
     }
-
-    public Scheduler(int processorUnits, List<KLT> kltList, int quantum){
-        this.processorUnits=processorUnits;
-        this.kltList=kltList;
-        this.quantum=quantum;
-        this.readyQueue= new LinkedBlockingQueue<KLT>();
-
-        ioList=new ArrayList<>(3);
-        for(int i=0;i<3;i++){
-            ioList.add(i,new LinkedBlockingQueue<>());
-        }
-    }
-
     private LinkedList<Integer> lkQe(Queue<NodeIO> ioQueue){ //TODO verlo despues
         LinkedList<Integer> ans=new LinkedList<>();
         for(NodeIO n: ioQueue){
@@ -57,7 +72,7 @@ public class Scheduler {
                 continue;
             }
             if (io.isFinished()){
-                readyQueue.add(io.klt);
+                readyListQ.get(io.klt.inCore).add(io.klt);
                 io.klt.state = Enum.ThreadState.READY;
                 q.remove();
             } else {
@@ -65,58 +80,92 @@ public class Scheduler {
             }
         }
     }
-    private void addIncomingKLT(int i){ //TODO IMPLEMEMNTAR PARA MULTICORE CHE
+    private int bestCore(){
+        int firstC=0,secondC=0;
+        for (KLT k : kltList){
+            if(k.inCore==0){
+                firstC++;
+            }
+            if(k.inCore==1){
+                secondC++;
+            }
+        }
+        if(firstC<=secondC){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
+
+    private void addIncomingKLT(int i){
         for (KLT k : kltList) { //mete en cola de listos los klt nuevos
             if (k.respawn == i) {
-                readyQueue.add(k);
+                if(processorUnits==1){
+                    readyListQ.get(0).add(k);
+                    k.inCore=0;
+                }else{
+                    int selected=bestCore();
+                    readyListQ.get(selected).add(k);
+                    k.inCore=selected;
+                }
             }
         }
     }
 
     private void putInIoQueue(NodeIO node){
         if (node.ioID == Enum.Job.IO1) {
-            ioList.get(0).add(new NodeIO(node.klt,node.ultID,Enum.Job.IO1,node.amount));
+            ioList.get(0).add(node);
         } else if (node.ioID == Enum.Job.IO2) {
-            ioList.get(1).add(new NodeIO(node.klt,node.ultID,Enum.Job.IO1,node.amount));
+            ioList.get(1).add(node);
         } else if (node.ioID == Enum.Job.IO3) {
-            ioList.get(2).add(new NodeIO(node.klt,node.ultID,Enum.Job.IO1,node.amount));
+            ioList.get(2).add(node);
         }
     }
 
-    private void generateExDetail(ExecutionDetail ex){
-        ArrayList<ExecutionDetail> exeList=new ArrayList<>(1);
-        exeList.add(ex);
-        System.out.println(new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList)); //TODO SACAR
-        ans.add(new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList));
+
+    private ExecutionDetail runKLT(KLT toExe) throws NotRunneableThread, InvalidArgumentException {
+        if (toExe == null) {
+            return new ExecutionDetail();
+        }else{
+            NodeIO node = toExe.run();
+            if(node.ioID != Enum.Job.CPU){
+                putInIoQueue(node);
+                //readyQueue.remove();
+                readyListQ.get(node.klt.inCore).remove();
+            }
+            if(toExe.isFinished()){
+                //readyQueue.remove();
+                readyListQ.get(node.klt.inCore).remove();
+            }
+            return new ExecutionDetail(node.klt.processID,node.klt.kltID,node.ultID);
+        }
     }
 
 
-    public List<Iteration> run() throws NotRunneableThread, InvalidArgumentException {
+
+    public List<Iteration> execute() throws NotRunneableThread, InvalidArgumentException {
         ans = new LinkedList<>();
         int i=0;
+        Iteration iter;
+        usedQuantum.set(0,0);
+        usedQuantum.set(1,0);
 
         while(!this.isFinished()) {
-
             addIncomingKLT(i);
             consumeIO();
-
-            KLT toExecute = readyQueue.peek();
-            if (toExecute == null) {
-                if(isFinished()){
-                    break;
-                }
-                generateExDetail(new ExecutionDetail());
+            ArrayList<ExecutionDetail> exeList=new ArrayList<>(2);
+            if(processorUnits==1){
+                KLT toExecute = readyListQ.get(0).peek();
+                exeList.add(runKLT(toExecute));
             }else{
-                NodeIO node = toExecute.run();
-                if(node.ioID != Enum.Job.CPU){
-                    putInIoQueue(node);
-                    readyQueue.remove();
-                }
-                if(toExecute.isFinished()){
-                    readyQueue.remove();
-                }
-                generateExDetail(new ExecutionDetail(node.klt.processID,node.klt.kltID,node.ultID));
+                KLT toExecute1 = readyListQ.get(0).peek();
+                KLT toExecute2 = readyListQ.get(1).peek();
+                exeList.add(runKLT(toExecute1));
+                exeList.add(runKLT(toExecute2));
             }
+            iter=new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList);//TODO SACAR
+            System.out.println(iter);
+            ans.add(iter);
             i++;
         }
         return ans;
