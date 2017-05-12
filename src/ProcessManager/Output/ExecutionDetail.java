@@ -2,7 +2,7 @@ package ProcessManager.Output;
 
 public class ExecutionDetail {
 
-    private int processID;
+    public int processID;
     private int kltID;
     private int ultID;
 

@@ -32,7 +32,7 @@ public class Main {
         primer=new ULT(1,33,alfa);
         ul.add(primer);
         KLT mother=new ThreadRR(1,1,ul,3);
-        mother.respawn=2;
+        mother.respawn=10;
         ArrayList<KLT> kk=new ArrayList<>();
         kk.add(mother);
         Scheduler s=new Scheduler(2,kk,-1);

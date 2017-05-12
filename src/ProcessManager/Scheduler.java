@@ -6,6 +6,7 @@ import ProcessManager.Output.Iteration;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
@@ -25,9 +26,9 @@ public class Scheduler {
     private List<KLT> kltList;
     private List<Iteration> ans;
     private List<Queue<NodeIO>> ioList;
-    @Deprecated
-    private Queue<KLT> readyQueue;
+
     private List<Queue<KLT>> readyListQ;
+    private Queue<KLT> waitingToDeploy; //
 
 
     public Scheduler(int processorUnits, List<KLT> kltList, int quantum){
@@ -39,6 +40,8 @@ public class Scheduler {
         this.readyListQ= new ArrayList<>(2);
         this.readyListQ.add(new LinkedBlockingQueue<>());
         this.readyListQ.add(new LinkedBlockingQueue<>());
+
+        this.waitingToDeploy=new LinkedBlockingQueue<>();
 
         this.usedQuantum.add(0);
         this.usedQuantum.add(0);
@@ -141,29 +144,55 @@ public class Scheduler {
         }
     }
 
+    private void biyiarada(int i){
+        for (KLT k : kltList) { //mete en cola de listos los klt nuevos
+            if (k.respawn == i) {
+                waitingToDeploy.add(k);
+            }
+        }
+    }
 
 
     public List<Iteration> execute() throws NotRunneableThread, InvalidArgumentException {
         ans = new LinkedList<>();
         int i=0;
-        Iteration iter;
         usedQuantum.set(0,0);
         usedQuantum.set(1,0);
 
+
         while(!this.isFinished()) {
-            addIncomingKLT(i);
+            //addIncomingKLT(i);
+            biyiarada(i);
             consumeIO();
             ArrayList<ExecutionDetail> exeList=new ArrayList<>(2);
-            if(processorUnits==1){
-                KLT toExecute = readyListQ.get(0).peek();
-                exeList.add(runKLT(toExecute));
-            }else{
-                KLT toExecute1 = readyListQ.get(0).peek();
-                KLT toExecute2 = readyListQ.get(1).peek();
-                exeList.add(runKLT(toExecute1));
-                exeList.add(runKLT(toExecute2));
+            Iteration iter=new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList);
+
+            KLT toEx = readyListQ.get(0).peek();
+            ExecutionDetail ex=runKLT(toEx);
+            if(ex.processID==0){  //BIYI
+                toEx=waitingToDeploy.poll();
+                if(toEx!=null){
+                    toEx.inCore=0;
+                    readyListQ.get(0).add(toEx);
+                    ex=runKLT(toEx);
+                }
             }
-            iter=new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList);//TODO SACAR
+            exeList.add(ex);
+            if(processorUnits==2){
+                toEx = readyListQ.get(1).peek();
+                ex=runKLT(toEx);
+                if(ex.processID==0){ //BIYI
+                    toEx=waitingToDeploy.poll();
+                    if(toEx!=null){
+                        toEx.inCore=1;
+                        readyListQ.get(1).add(toEx);
+                        ex=runKLT(toEx);
+                    }
+                }
+                exeList.add(ex);
+            }
+            //iter=new Iteration(lkQe(ioList.get(0)), lkQe(ioList.get(1)),lkQe(ioList.get(2)),exeList);//TODO SACAR
+            iter.setExDetail(exeList);
             System.out.println(iter);
             ans.add(iter);
             i++;
