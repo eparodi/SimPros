@@ -16,6 +16,12 @@ public class TraceLine {
 		elementArray.add(element);
 	}
 	
+	public void build(Character[][] matrix, int col, HashMap<Integer, Integer> truePositionsMap) {
+		for (TraceElement element : elementArray) {
+			element.build(matrix, col, truePositionsMap);
+		}
+	}
+	
 	public void print() {
 		if (time < 10)
 			System.out.print("Time: " + time + ":  [  ");

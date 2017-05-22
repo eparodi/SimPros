@@ -13,17 +13,20 @@ public class KernelLevelThread {
 	private int index;
 	private int ID;
 	private int processID;
+	private int needTime;
 	
-	public KernelLevelThread(ArrayList<UserLevelThread> userThreadArray, ThreadLibrary.Algorithm algorithm, int ID, int processID) {
-		threadLibrary = new ThreadLibrary(userThreadArray, algorithm);
-		this.ID = ID;
-		this.processID = processID;
+	public KernelLevelThread(ArrayList<UserLevelThread> ultArray, int algorithm, int ID, int processID) {
+		this(ultArray, algorithm, 0, ID, processID);
 	}
 	
-	public KernelLevelThread(ArrayList<UserLevelThread> userThreadArray, ThreadLibrary.Algorithm algorithm, long quantum, int ID, int processID) {
-		threadLibrary = new ThreadLibrary(userThreadArray, algorithm, quantum);
+	public KernelLevelThread(ArrayList<UserLevelThread> ultArray, int algorithm, long quantum, int ID, int processID) {
+		threadLibrary = new ThreadLibrary(ultArray, algorithm, quantum);
 		this.ID = ID;
 		this.processID = processID;
+		needTime = 0;
+		for (UserLevelThread ult : ultArray) {
+			needTime += ult.getNeedTime();
+		}
 	}
 	
 	public KernelLevelThread(ArrayList<Task> taskArray, int ID, int processID) {
@@ -36,6 +39,11 @@ public class KernelLevelThread {
 			state = UserLevelThread.ThreadState.BLOCKED;
 		else
 			state = UserLevelThread.ThreadState.NONBLOCKED;
+		needTime = 0;
+		for (Task task : taskArray) {
+			if (task.getType() != Task.Type.IO)
+				needTime += task.getAmount();
+		}
 	}
 	
 	public UserLevelThread.ThreadState getState() {
@@ -62,17 +70,17 @@ public class KernelLevelThread {
 		return ID;
 	}
 	
+	public int getNeedTime() {
+		return needTime;
+	}
+	
 	public int getProcessID() {
 		return processID;
 	}
 	
-	public int hashcode() {
-		return ID;
-	}
-	
-	public void run() {
+	public void run(TraceElement element) {
 		if (taskArray == null) {
-			threadLibrary.run();
+			threadLibrary.run(element);
 			return;
 		}
 		runningTask.run();
@@ -100,6 +108,10 @@ public class KernelLevelThread {
 		if (this.ID != (klt.getID()))
 			return false;
 		return true;
+	}
+	
+	public int hashCode() {
+		return ID;
 	}
 	
 }

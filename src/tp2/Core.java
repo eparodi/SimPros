@@ -1,7 +1,5 @@
 package tp2;
 
-import java.util.*;
-
 public class Core {
 
 	private KernelLevelThread runningKlt;
@@ -27,12 +25,6 @@ public class Core {
 	
 	public void setRunningKlt(KernelLevelThread klt) {
 		runningKlt = klt;
-	}
-	
-	public void run() {
-		if (runningKlt == null)
-			throw new RuntimeException("A core tried to run its runningKlt when it was null");
-		runningKlt.run();
 	}
 	
 	public boolean equals(Object o) {
