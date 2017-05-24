@@ -5,28 +5,24 @@ public class Process {
 	
 	private ArrayList<KernelLevelThread> kernelThreadsArray;
 	private int ID;
-	private int startTime;
+	private int arrivalTime;
 	
-	public Process(ArrayList<KernelLevelThread> kernelThreadsArray, int ID, int startTime) {
+	public Process(ArrayList<KernelLevelThread> kernelThreadsArray, int ID, int arrivalTime) {
 		this.kernelThreadsArray = kernelThreadsArray;
 		this.ID = ID;
-		this.startTime = startTime;
+		this.arrivalTime = arrivalTime;
 	}
 	
 	public int getID() {
 		return ID;
 	}
 	
-	public int getStartTime() {
-		return startTime;
+	public int getArrivalTime() {
+		return arrivalTime;
 	}
 	
 	public ArrayList<KernelLevelThread> getKernelThreadsArray() {
 		return kernelThreadsArray;
-	}
-	
-	public int hashcode() {
-		return ID;
 	}
 	
 	public UserLevelThread.ThreadState getState() {
@@ -61,6 +57,10 @@ public class Process {
 		if (this.ID != (process.getID()))
 			return false;
 		return true;
+	}
+	
+	public int hashCode() {
+		return ID;
 	}
 	
 }

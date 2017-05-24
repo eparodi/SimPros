@@ -2,8 +2,6 @@ package tp2;
 
 import java.util.*;
 
-import tp2.UserLevelThread.ThreadState;
-
 public class IoManager {
 	
 	private HashMap<Integer, KernelLevelThread> blockedExecutingThreads;
@@ -37,8 +35,10 @@ public class IoManager {
 			KernelLevelThread klt = blockedExecutingThreads.get(device);
 			if (klt == null)
 				throw new RuntimeException("A device appears to be busy when it has no executing thread");
-			klt.run();
-			tManager.insertElement(klt, device);
+			TraceElement element = new TraceElement(klt.getProcessID(), klt.getID());
+			klt.run(element);
+			element.setDevice(device);
+			tManager.insertElement(element);
 			UserLevelThread.ThreadState state = klt.getState();
 			switch(state) {
 				case NONBLOCKED: {

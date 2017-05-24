@@ -2,30 +2,37 @@ package tp2;
 import java.util.*;
 
 public class ThreadLibrary {
-
-	public static enum Algorithm {
-		FIFO, RR, HRRN, SPN, SRT
-	};
 	
-	private long quantum;
+	private UserLevelThread runningUlt;
 	private Algorithm algorithm;
 	
-	private Queue<UserLevelThread> readyQueue;
-	private UserLevelThread runningUlt;			// Whether it's blocked or not.
-	
-	public ThreadLibrary(ArrayList<UserLevelThread> user_thread_array, Algorithm algorithm) {
-		readyQueue = new LinkedList<>();
-		this.algorithm = algorithm;
-		
-		for (UserLevelThread ult : user_thread_array) {
-			readyQueue.offer(ult);
+	public ThreadLibrary(ArrayList<UserLevelThread> ultArray, int algorithm, long quantum) {
+		switch(algorithm) {
+			case 0: {
+				this.algorithm = new FIFO(ultArray);
+				break;
+			}
+			case 1: {
+				this.algorithm = new RR(ultArray, quantum);
+				break;
+			}
+			case 2: {
+				this.algorithm = new SPN(ultArray);
+				break;
+			}
+			case 3:	{
+				this.algorithm = new SRT(ultArray);
+				break;
+			}
+			case 4:	{
+				this.algorithm = new HRRN(ultArray);
+				break;
+			}
 		}
-		runningUlt = readyQueue.poll();
-	}
-	
-	public ThreadLibrary(ArrayList<UserLevelThread> user_thread_array, Algorithm algorithm, long quantum) {
-		this(user_thread_array, algorithm);
-		this.quantum = quantum;
+		runningUlt = this.algorithm.getFirst();
+		if (runningUlt == null) {
+			throw new RuntimeException("A thread library initialized a null first ult.");
+		}
 	}
 	
 	public UserLevelThread.ThreadState getState() {
@@ -42,32 +49,20 @@ public class ThreadLibrary {
 		return runningUlt;
 	}
 	
-	public void run() {
-		if (runningUlt.getState() == UserLevelThread.ThreadState.BLOCKED) {
-			runningUlt.run();
-			if (runningUlt.getState() == UserLevelThread.ThreadState.FINISHED)
-				runningUlt = readyQueue.poll();
-			return;
+	public void run(TraceElement element) {
+		if (runningUlt == null) {
+			throw new RuntimeException("A thread library tried to run a null ult.");
 		}
-		switch(algorithm) {
-			case FIFO: {
-				runningUlt.run();
-				if (runningUlt.getState() == UserLevelThread.ThreadState.FINISHED)
-					runningUlt = readyQueue.poll();
-				break;
-			}
-			case RR: {
-				break;
-			}
-			case HRRN: {
-				break;
-			}
-			case SPN: {
-				break;
-			}
-			case SRT: {
-				break;
-			}
+		if (runningUlt.getState() == UserLevelThread.ThreadState.NONBLOCKED) {
+			runningUlt = algorithm.pickNext(runningUlt);
+			element.setUlt(runningUlt.getID());
+			runningUlt.run();
+			runningUlt = algorithm.update(runningUlt);
+			algorithm.updateNewUlts();
+		}
+		else if (runningUlt.getState() == UserLevelThread.ThreadState.BLOCKED) {
+			element.setUlt(runningUlt.getID());
+			runningUlt.run();
 		}
 	}
 	

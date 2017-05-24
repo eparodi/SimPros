@@ -12,17 +12,25 @@ public class UserLevelThread {
 	private int index;
 	private int ID;
 	private ThreadState state;
+	private int arrivalTime;
+	private int needTime;
 	
-	public UserLevelThread(ArrayList<Task> taskArray, int ID) {
+	public UserLevelThread(ArrayList<Task> taskArray, int ID, int arrivalTime) {
 		this.taskArray = taskArray;
 		this.index = 0;
 		this.ID = ID;
+		this.arrivalTime = arrivalTime;
 		this.runningTask = taskArray.get(index);
 		if (runningTask.getType() == Task.Type.IO) {
-			state = ThreadState.BLOCKED;
+			throw new RuntimeException("A taskArray started with an IO task");
 		}
 		else
 			state = ThreadState.NONBLOCKED;
+		needTime = 0;
+		for (Task task : taskArray) {
+			if (task.getType() != Task.Type.IO)
+				needTime += task.getAmount();
+		}
 	}
 	
 	public ThreadState getState() {
@@ -38,6 +46,28 @@ public class UserLevelThread {
 			return runningTask.getDevice();
 		else
 			return -1;
+	}
+	
+	public int getArrivalTime() {
+		return arrivalTime;
+	}
+	
+	public int getNeedTime() {
+		return needTime;
+	}
+	
+	public void decrementArrivalTime() {
+		if (arrivalTime == 0)
+			throw new RuntimeException("Tried to decrement an arrival time of 0");
+		else
+			arrivalTime = arrivalTime - 1;
+	}
+	
+	public void decrementNeedTime() {
+		if (needTime == 0)
+			throw new RuntimeException("Tried to decrement a need time of 0");
+		else
+			needTime = needTime - 1;
 	}
 	
 	public void run() {
@@ -66,6 +96,10 @@ public class UserLevelThread {
 		if (this.ID != (ult.getID()))
 			return false;
 		return true;
+	}
+	
+	public int hashCode() {
+		return this.ID;
 	}
 	
 }
