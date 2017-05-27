@@ -15,6 +15,7 @@ public class Interpreter {
 
     public static void main(String[] args){
         for (int i = 1 ; i <= 30; i++){
+            createRandomJSON("JSONExamples/example-"+i+".json");
             System.out.println("JSONExamples/example-"+i+".json");
             try {
                 jsonToProcess("JSONExamples/example-"+i+".json");
@@ -169,6 +170,9 @@ public class Interpreter {
         boolean cpu = true;
 
         Integer taskNumber = r.nextInt(10) + 1;
+        if (taskNumber % 2 == 0){
+            taskNumber += 1;
+        }
         for (int i = 0 ; i < taskNumber ; i++ ){
             JSONObject task = new JSONObject();
             Integer quantum = r.nextInt(10) + 1 ;
