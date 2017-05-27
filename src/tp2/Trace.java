@@ -18,17 +18,9 @@ public class Trace {
 		return lineArray.size();
 	}
 	
-	public void build(Character [][] matrix, HashMap<Integer, Integer> truePositionsMap) {
+	public void build(String[][] matrix, HashMap<Integer, Integer> truePositionsMap) {
 		for (int i = 0; i < lineArray.size(); i++) {
 			lineArray.get(i).build(matrix, i, truePositionsMap);
-		}
-	}
-	
-	public void print() {
-		System.out.println("Trace:");
-		System.out.println("");
-		for (TraceLine line : lineArray) {
-			line.print();
 		}
 	}
 

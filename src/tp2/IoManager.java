@@ -76,4 +76,8 @@ public class IoManager {
 		return empty;
 	}
 	
+	public ArrayList<Queue<KernelLevelThread>> getBlockedQueues() {
+		return blockedQueues;
+	}
+	
 }
