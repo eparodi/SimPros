@@ -1,40 +1,20 @@
 package tp2;
 
-import java.util.*;
+import java.util.HashMap;
 
 public class TraceManager {
 	
 	private Trace trace;
-	private Character[][] matrix;
 	private TraceLine traceLine;
-	private int rows;
-	private int cols;
+	private GanttBuilder gBuilder;
 	
 	public TraceManager() {
 		trace = new Trace();
+		gBuilder = new GanttBuilder();
 	}
 	
-	public void print() {
-		trace.print();
-	}
-	
-	public void printGantt() {
-		for (int i = 0; i < rows; i ++) {
-			for (int j = 0; j < cols; j ++) {
-				if (matrix[i][j] == null)
-					System.out.print(" |");
-				else
-					System.out.print(matrix[i][j] + "|");
-			}
-			System.out.println("");
-		}
-	}
-	
-	public void buildGantt(int rows, HashMap<Integer, Integer> truePositionsMap) {
-		this.rows = rows;
-		this.cols = trace.getLineCount();
-		matrix = new Character[rows][cols];
-		trace.build(matrix, truePositionsMap);
+	public Trace getTrace() {
+		return trace;
 	}
 	
 	public void createLine(int time) {
@@ -44,15 +24,6 @@ public class TraceManager {
 	public void insertLine() {
 		trace.insertLine(traceLine);
 		traceLine = null;
-	}
-	
-	public void insertElement(KernelLevelThread klt, Core core) {
-		TraceElement element = new TraceElement(klt.getProcessID(), klt.getID());
-		element.setCore(core.getID());
-		UserLevelThread ult = klt.getRunningUlt();
-		if (ult != null)
-			element.setUlt(ult.getID());
-		traceLine.insertElement(element);
 	}
 	
 	public void insertElement(TraceElement element) {
@@ -66,6 +37,22 @@ public class TraceManager {
 		if (ult != null)
 			element.setUlt(ult.getID());
 		traceLine.insertElement(element);
+	}
+	
+	public void insertGanttLine(GanttLine gLine) {
+		gBuilder.insertGanttLine(gLine);
+	}
+	
+	public void setGantt(int rows, HashMap<Integer, Integer> truePositionsMap) {
+		gBuilder.setGantt(rows, truePositionsMap, trace);
+	}
+	
+	public void printGantt() {
+		gBuilder.printGantt();
+	}
+	
+	public void printGanttLine(int index) {
+		gBuilder.printGanttLine(index);
 	}
 
 }
