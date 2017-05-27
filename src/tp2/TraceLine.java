@@ -4,11 +4,9 @@ import java.util.*;
 
 public class TraceLine {
 	
-	private int time;
 	private ArrayList<TraceElement> elementArray;
 	
 	public TraceLine(int time) {
-		this.time = time;
 		elementArray = new ArrayList<>();
 	}
 	
@@ -16,24 +14,10 @@ public class TraceLine {
 		elementArray.add(element);
 	}
 	
-	public void build(Character[][] matrix, int col, HashMap<Integer, Integer> truePositionsMap) {
+	public void build(String[][] matrix, int col, HashMap<Integer, Integer> truePositionsMap) {
 		for (TraceElement element : elementArray) {
 			element.build(matrix, col, truePositionsMap);
 		}
-	}
-	
-	public void print() {
-		if (time < 10)
-			System.out.print("Time: " + time + ":  [  ");
-		else if (time > 9 && time < 100)
-			System.out.print("Time: " + time + ": [  ");
-		else if (time > 99)
-			System.out.print("Time: " + time + ":[  ");
-		for (TraceElement element : elementArray) {
-			element.print();
-			System.out.print(" ");
-		}
-		System.out.println(" ]");
 	}
 
 }

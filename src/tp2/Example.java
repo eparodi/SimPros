@@ -20,7 +20,7 @@ public class Example {
 		
 		coresArray = new ArrayList<>();
 		coresArray.add(new Core(1));
-		coresArray.add(new Core(2));
+		//coresArray.add(new Core(2));
 		
 		ArrayList<Task> taskArray11 = new ArrayList<>();
 		taskArray11.add(new Task(3));
@@ -259,6 +259,96 @@ public class Example {
 		
 		//KernelLevelThread(ArrayList<UserLevelThread> ultArray, int algorithm, int ID, int processID)
 		
+	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public void setExample4() {
+		truePositionsMap = new HashMap<>();
+		deviceCount = 2;
+		rows = 7;
+		
+		coresArray = new ArrayList<>();
+		coresArray.add(new Core(1));
+		
+		ArrayList<Task> taskArray11 = new ArrayList<>();
+		taskArray11.add(new Task(3));
+		taskArray11.add(new Task(3,1));
+		taskArray11.add(new Task(4));
+		taskArray11.add(new Task(2,1));
+		taskArray11.add(new Task(2));
+		KernelLevelThread klt11 = new KernelLevelThread(taskArray11, 11, 1);		// KLT 11
+		truePositionsMap.put(11, 0);
+		
+		ArrayList<Task> taskArray121 = new ArrayList<>();
+		taskArray121.add(new Task(2));
+		taskArray121.add(new Task(1,1));
+		taskArray121.add(new Task(1));
+		UserLevelThread ult121 = new UserLevelThread(taskArray121, 121, 0);
+		truePositionsMap.put(121, 1);
+		
+		ArrayList<Task> taskArray122 = new ArrayList<>();
+		taskArray122.add(new Task(1));
+		taskArray122.add(new Task(2,2));
+		taskArray122.add(new Task(2));
+		UserLevelThread ult122 = new UserLevelThread(taskArray122, 122, 2);
+		truePositionsMap.put(122, 2);
+		
+		ArrayList<Task> taskArray123 = new ArrayList<>();
+		taskArray123.add(new Task(3));
+		taskArray123.add(new Task(1,1));
+		taskArray123.add(new Task(1));
+		UserLevelThread ult123 = new UserLevelThread(taskArray123, 123, 0);
+		truePositionsMap.put(123, 3);
+		
+		ArrayList<UserLevelThread> ultArray12 = new ArrayList<>();
+		ultArray12.add(ult121);
+		ultArray12.add(ult122);
+		ultArray12.add(ult123);
+		KernelLevelThread klt12 = new KernelLevelThread(ultArray12, 3, 12, 1);		// KLT 12
+		
+		ArrayList<Task> taskArray131 = new ArrayList<>();
+		taskArray131.add(new Task(4));
+		taskArray131.add(new Task(2,2));
+		taskArray131.add(new Task(2));
+		UserLevelThread ult131 = new UserLevelThread(taskArray131, 131, 0);
+		truePositionsMap.put(131, 4);
+		
+		ArrayList<Task> taskArray132 = new ArrayList<>();
+		taskArray132.add(new Task(2));
+		taskArray132.add(new Task(1,1));
+		taskArray132.add(new Task(2));
+		UserLevelThread ult132 = new UserLevelThread(taskArray132, 132, 2);
+		truePositionsMap.put(132, 5);
+		
+		ArrayList<UserLevelThread> ultArray13 = new ArrayList<>();
+		ultArray13.add(ult131);
+		ultArray13.add(ult132);
+		KernelLevelThread klt13 = new KernelLevelThread(ultArray13, 0, 13, 1);		// KLT 13
+		
+		ArrayList<KernelLevelThread> kltArray1 = new ArrayList<>();
+		kltArray1.add(klt11);
+		kltArray1.add(klt12);
+		kltArray1.add(klt13);
+		Process process1 = new Process(kltArray1, 1, 0);							// P 1
+		
+		ArrayList<Task> taskArray21 = new ArrayList<>();
+		taskArray21.add(new Task(1));
+		taskArray21.add(new Task(4,1));
+		taskArray21.add(new Task(2));
+		taskArray21.add(new Task(1,1));
+		taskArray21.add(new Task(3));
+		KernelLevelThread klt21 = new KernelLevelThread(taskArray21, 21, 2);		// KLT 21
+		truePositionsMap.put(21, 6);
+		
+		ArrayList<KernelLevelThread> kltArray2 = new ArrayList<>();
+		kltArray2.add(klt21);
+		Process process2 = new Process(kltArray2, 2, 0);							// P 2
+		
+		processArray = new ArrayList<>();
+		processArray.add(process1);
+		processArray.add(process2);
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
