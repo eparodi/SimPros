@@ -1,6 +1,7 @@
 package Interpreter;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import tp2.*;
 import tp2.Process;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class Interpreter {
 
-    public static Scheduler jsonToProcess(String pathname) throws FileNotFoundException {
+    public static Scheduler jsonToProcess(String pathname) throws FileNotFoundException, JSONException {
         // Read JSON data.
         BufferedReader reader = new BufferedReader(new FileReader(pathname));
         String json = "";
@@ -25,7 +26,7 @@ public class Interpreter {
         // IO Devices
         Integer ioDevices = data.getInt("io_devices");
         // Rows
-        Integer rows = data.getInt("rows");
+        Integer rows = 0;
         // Cores
         Integer coreNumber = data.getInt("cores");
         ArrayList<Core> cores = new ArrayList<>();
@@ -43,13 +44,16 @@ public class Interpreter {
             JSONArray klts = data.getJSONArray("klt");
             List<KernelLevelThread> kltList = new ArrayList<>();
             for (Object kltValue: klts){
+                rows ++;
                 JSONObject klt = (JSONObject) kltValue;
                 Integer kltId = klt.getInt("id");
                 if (klt.getBoolean("ult")){
+                    rows --;
                     Integer algorithm = klt.getInt("algorithm");
                     JSONArray ults = klt.getJSONArray("ult");
                     List<UserLevelThread> ultList = new ArrayList<>();
                     for (Object ultValue: ults){
+                        rows ++;
                         JSONObject ult = (JSONObject) ultValue;
                         Integer arrivalTimeULT = ult.getInt("arrival_time");
                         Integer ultId = ult.getInt("id");
