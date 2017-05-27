@@ -125,8 +125,6 @@ public class Scheduler {
 				}
 			}
 			tManager.insertLine();
-			GanttLine gLine = new GanttLine(readyProcessesQueue, runningProcessesArray, readyKltQueuesMap, ioManager.getBlockedQueues());
-			tManager.insertGanttLine(gLine);
 			timeCounter ++;
 			/*
 			 * Finally, we check if there is a new process to put in the ready process queue or directly
