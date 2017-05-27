@@ -8,6 +8,8 @@ class SwingContainer {
 
     private String[] columns = {};
     private String[][] data = {};
+    private String[] algorithms = {"FIFO","HRRN"};
+
     void createAndShowGUI() {
         //Create and set up the window.
         JFrame mainFrame = new JFrame("SimPros");
@@ -15,7 +17,6 @@ class SwingContainer {
         mainFrame.setLayout(new BorderLayout());
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        //Add the ubiquitous "Hello World" label.
         JLabel label = new JLabel("Welcome to SimPros, the process simulator!");
         mainFrame.getContentPane().add(label, BorderLayout.PAGE_START);
 
@@ -34,6 +35,14 @@ class SwingContainer {
         buttons.add(addButton("src/GraphicInterface/Images/NextButton.png"));
         buttons.add(addButton("src/GraphicInterface/Images/PlayButton.png"));
         buttons.add(addButton("src/GraphicInterface/Images/PreviousButton.png"));
+
+//        JPanel options = new JPanel(new FlowLayout());
+//        mainFrame.getContentPane().add(options, BorderLayout.LINE_END);
+        JComboBox<String> algorithmsList = new JComboBox<>(algorithms);
+
+        buttons.add(new JButton("Load"));
+        buttons.add(new JButton("Generate GANTT"));
+        buttons.add(algorithmsList);
 
         //Display the window.
         mainFrame.setVisible(true);
