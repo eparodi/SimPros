@@ -5,13 +5,24 @@ import org.json.JSONObject;
 import tp2.*;
 import tp2.Process;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Interpreter {
+
+    public static void main(String[] args){
+        for (int i = 1 ; i <= 30; i++){
+            System.out.println("JSONExamples/example-"+i+".json");
+            try {
+                jsonToProcess("JSONExamples/example-"+i+".json");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
     public static Scheduler jsonToProcess(String pathname) throws FileNotFoundException {
         // Read JSON data.
@@ -24,8 +35,6 @@ public class Interpreter {
         JSONObject data = new JSONObject(json);
         // IO Devices
         Integer ioDevices = data.getInt("io_devices");
-        // Rows
-        Integer rows = data.getInt("rows");
         // Cores
         Integer coreNumber = data.getInt("cores");
         ArrayList<Core> cores = new ArrayList<>();
@@ -40,14 +49,14 @@ public class Interpreter {
             JSONObject process = (JSONObject) processValue;
             Integer id = process.getInt("id");
             Integer arrivalTime = process.getInt("arrival_time");
-            JSONArray klts = data.getJSONArray("klt");
+            JSONArray klts = process.getJSONArray("klt");
             List<KernelLevelThread> kltList = new ArrayList<>();
             for (Object kltValue: klts){
                 JSONObject klt = (JSONObject) kltValue;
                 Integer kltId = klt.getInt("id");
                 if (klt.getBoolean("ult")){
                     Integer algorithm = klt.getInt("algorithm");
-                    JSONArray ults = klt.getJSONArray("ult");
+                    JSONArray ults = klt.getJSONArray("ults");
                     List<UserLevelThread> ultList = new ArrayList<>();
                     for (Object ultValue: ults){
                         JSONObject ult = (JSONObject) ultValue;
@@ -83,6 +92,93 @@ public class Interpreter {
         }
 
         return taskList;
+    }
+
+    public static void createRandomJSON(String filename){
+        JSONObject data = new JSONObject();
+        Random r = new Random();
+
+        Integer kltID = 100;
+        Integer ultID = 1000;
+
+        Integer ioDevices = r.nextInt(5) + 2;
+        data.put("io_devices",ioDevices);
+        data.put("cores",2);
+
+        JSONArray processes = new JSONArray();
+        int processNumber = r.nextInt(15);
+        int arrivalTime = 0;
+
+        for (int i = 0 ; i < processNumber; i++){
+            Integer id = i + 1;
+            JSONObject process = new JSONObject();
+            process.put("id",id);
+            process.put("arrival_time",arrivalTime);
+            arrivalTime += r.nextInt(5);
+
+            int kltNumber = r.nextInt(5) + 1;
+            JSONArray klts = new JSONArray();
+            for (int j = 0 ; j < kltNumber ; j++ ){
+                JSONObject klt = new JSONObject();
+                klt.put("id", kltID++);
+                if(r.nextBoolean()){
+                    klt.put("ult",true);
+                    Integer algorithm = r.nextInt(5);
+                    klt.put("algorithm",algorithm);
+                    Integer ultNumber = r.nextInt(4)+2;
+                    JSONArray ults = new JSONArray();
+                    int ultArrivalTime = 0;
+                    for (int k = 0 ; k < ultNumber ; k++ ){
+                        JSONObject ult = new JSONObject();
+                        ult.put("arrival_time",ultArrivalTime);
+                        ultArrivalTime += r.nextInt(5);
+                        ult.put("id",ultID++);
+                        ult.put("tasks",createTasks(ioDevices));
+                        ults.put(ult);
+                    }
+                    klt.put("ults",ults);
+                }else{
+                    klt.put("ult",false);
+                    klt.put("tasks",createTasks(ioDevices));
+                }
+                klts.put(klt);
+            }
+            process.put("klt", klts);
+            processes.put(process);
+        }
+        data.put("process",processes);
+
+        try{
+            PrintWriter writer = new PrintWriter(filename, "UTF-8");
+            writer.print(data);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static JSONArray createTasks(Integer ioDevices){
+        JSONArray tasks = new JSONArray();
+        Random r = new Random();
+        boolean cpu = true;
+
+        Integer taskNumber = r.nextInt(10) + 1;
+        for (int i = 0 ; i < taskNumber ; i++ ){
+            JSONObject task = new JSONObject();
+            Integer quantum = r.nextInt(10) + 1 ;
+            task.put("quantum",quantum);
+            if (cpu){
+                cpu = false;
+                task.put("io",false);
+            }else{
+                cpu = true;
+                task.put("io",true);
+                task.put("device_number",r.nextInt(ioDevices)+1);
+            }
+            tasks.put(task);
+        }
+
+        return tasks;
     }
 
 }
