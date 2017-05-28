@@ -10,15 +10,26 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.HashMap;
 
 public class Interpreter {
 
+    private static Integer rows;
+    private static HashMap<Integer, Integer> truePositionsMap;
+
     public static void main(String[] args){
-        for (int i = 1 ; i <= 30; i++){
+        for (int i = 1 ; i <= 29; i++){
             createRandomJSON("JSONExamples/example-"+i+".json");
             System.out.println("JSONExamples/example-"+i+".json");
+            long currentTime = System.currentTimeMillis();
+            while(System.currentTimeMillis() - currentTime < 1000)
+                ;
             try {
-                jsonToProcess("JSONExamples/example-"+i+".json");
+                Scheduler scheduler = jsonToProcess("JSONExamples/example-"+i+".json");
+                TraceManager tManager = new TraceManager();
+                scheduler.run(tManager);
+                tManager.setGantt(rows, truePositionsMap);
+                tManager.printGantt();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -38,11 +49,14 @@ public class Interpreter {
         // IO Devices
         Integer ioDevices = data.getInt("io_devices");
         // Rows
-        Integer rows = 0;
+        rows = 0;
+        // Positions
+        truePositionsMap = new HashMap<>();
+        Integer index = 0;
         // Cores
         Integer coreNumber = data.getInt("cores");
         ArrayList<Core> cores = new ArrayList<>();
-        for (int i = 0 ; i < coreNumber ; i++){
+        for (int i = 0 ; i < coreNumber ; i++) {
             cores.add(new Core(i + 1));
         }
 
@@ -69,11 +83,15 @@ public class Interpreter {
                         JSONObject ult = (JSONObject) ultValue;
                         Integer arrivalTimeULT = ult.getInt("arrival_time");
                         Integer ultId = ult.getInt("id");
+                        truePositionsMap.put(ultId, index);
+                        index ++;
                         List<Task> tasks = getTasks(ult.getJSONArray("tasks"));
                         ultList.add(new UserLevelThread((ArrayList<Task>) tasks,ultId,arrivalTimeULT));
                     }
                     kltList.add(new KernelLevelThread((ArrayList<UserLevelThread>) ultList,algorithm,kltId,id));
                 }else{
+                    truePositionsMap.put(kltId, index);
+                    index ++;
                     List<Task> tasks = getTasks(klt.getJSONArray("tasks"));
                     kltList.add(new KernelLevelThread((ArrayList<Task>) tasks,kltId,id));
                 }
