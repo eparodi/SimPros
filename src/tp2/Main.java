@@ -12,7 +12,8 @@ public class Main {
 		//example.setExample2();
 		//example.setExample3();
 		//example.setExample4();
-		
+
+		/*
 		Scheduler scheduler = new Scheduler(example.getCoresArray(), example.getProcessArray(), example.getDeviceCount(), 2);
 		TraceManager tManager = new TraceManager();
 		scheduler.run(tManager);
@@ -21,6 +22,7 @@ public class Main {
 		tManager.printGantt();
 		
 		tManager.printGanttLine(0);
+		*/
 	}
 	
 }

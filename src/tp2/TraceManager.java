@@ -43,12 +43,12 @@ public class TraceManager {
 		gBuilder.insertGanttLine(gLine);
 	}
 	
-	public void setGantt(int rows, HashMap<Integer, Integer> truePositionsMap) {
-		gBuilder.setGantt(rows, truePositionsMap, trace);
+	public void setGantt(int rows, int cores, HashMap<Integer, Integer> truePositionsMap) {
+		gBuilder.setGantt(rows, cores, truePositionsMap, trace);
 	}
 	
-	public void printGantt() {
-		gBuilder.printGantt();
+	public void printGantt(String[][] infoMatrix) {
+		gBuilder.printGantt(infoMatrix);
 	}
 	
 	public void printGanttLine(int index) {
