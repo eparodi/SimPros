@@ -13,9 +13,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-class SwingContainer {
+public class SwingContainer {
 
-    private String[][] data = {};
+    private String[][] data;
     private int index = 0;
     private String[] algorithms = {"FIFO","RR"};
     private final static JFileChooser fc = new JFileChooser();
@@ -49,9 +49,9 @@ class SwingContainer {
 
         mainFrame.getContentPane().add(buttons, BorderLayout.PAGE_END);
 
-        buttons.add(addButton("src/GraphicInterface/Images/PreviousButton.png", e -> previous()));
-        buttons.add(addButton("src/GraphicInterface/Images/PlayButton.png", e -> play()));
-        buttons.add(addButton("src/GraphicInterface/Images/NextButton.png", e -> next()));
+        buttons.add(addButton("Images/PreviousButton.png", e -> previous()));
+        buttons.add(addButton("Images/PlayButton.png", e -> play()));
+        buttons.add(addButton("Images/NextButton.png", e -> next()));
 
 //        JPanel options = new JPanel(new FlowLayout());
 //        mainFrame.getContentPane().add(options, BorderLayout.LINE_END);

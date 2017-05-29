@@ -16,16 +16,16 @@ public class Interpreter {
     public static void main(String[] args){
         for (int i = 1 ; i <= 30; i++){
             createRandomJSON("JSONExamples/example-"+i+".json");
-            System.out.println("JSONExamples/example-"+i+".json");
-            try {
-                Scheduler scheduler = jsonToProcess("JSONExamples/example-"+i+".json", null);
-                TraceManager tManager = new TraceManager();
-                scheduler.run(tManager);
-                tManager.setInfo(scheduler.getInfoMatrix());
-                tManager.setGantt(scheduler.getInfoMatrix().size(), scheduler.getCores(), scheduler.getPositionsMap());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+//            System.out.println("JSONExamples/example-"+i+".json");
+//            try {
+//                Scheduler scheduler = jsonToProcess("JSONExamples/example-"+i+".json", null);
+//                TraceManager tManager = new TraceManager();
+//                scheduler.run(tManager);
+//                tManager.setInfo(scheduler.getInfoMatrix());
+//                tManager.setGantt(scheduler.getInfoMatrix().size(), scheduler.getCores(), scheduler.getPositionsMap());
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
         }
 
     }
