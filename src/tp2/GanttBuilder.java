@@ -15,6 +15,10 @@ public class GanttBuilder {
 	public GanttBuilder() {
 		ganttLineArray = new ArrayList<>();
 	}
+
+	public String[][] getGantt() {
+		return gantt;
+	}
 	
 	public void insertGanttLine(GanttLine gLine) {
 		ganttLineArray.add(gLine);
