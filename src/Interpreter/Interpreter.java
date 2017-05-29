@@ -18,7 +18,7 @@ public class Interpreter {
             createRandomJSON("JSONExamples/example-"+i+".json");
             System.out.println("JSONExamples/example-"+i+".json");
             try {
-                Scheduler scheduler = jsonToProcess("JSONExamples/example-"+i+".json");
+                Scheduler scheduler = jsonToProcess("JSONExamples/example-"+i+".json", null);
                 TraceManager tManager = new TraceManager();
                 scheduler.run(tManager);
                 tManager.setInfo(scheduler.getInfoMatrix());
@@ -30,7 +30,7 @@ public class Interpreter {
 
     }
 
-    public static Scheduler jsonToProcess(String pathname) throws FileNotFoundException {
+    public static Scheduler jsonToProcess(String pathname, Integer quantumNumber) throws FileNotFoundException {
         // Read JSON data.
         BufferedReader reader = new BufferedReader(new FileReader(pathname));
         String json = "";
@@ -124,9 +124,14 @@ public class Interpreter {
             }
             processList.add(new tp2.Process((ArrayList<KernelLevelThread>) kltList,id,arrivalTime));
         }
-        Scheduler scheduler = new Scheduler(cores, (ArrayList<Process>) processList,ioDevices);
+        Scheduler scheduler;
+        if ( quantumNumber == null){
+            scheduler = new Scheduler(cores, (ArrayList<Process>) processList, ioDevices);
+        }else{
+            scheduler = new Scheduler(cores, (ArrayList<Process>) processList, ioDevices, quantumNumber);
+        }
         scheduler.setInfo(infoMatrix, positionsMap);
-        return  scheduler;
+        return scheduler;
     }
 
     private static List<Task> getTasks(JSONArray tasks){

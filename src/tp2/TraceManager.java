@@ -7,7 +7,7 @@ public class TraceManager {
 	
 	private Trace trace;
 	private TraceLine traceLine;
-	private GanttBuilder gBuilder;
+	public GanttBuilder gBuilder;
 	
 	public TraceManager() {
 		trace = new Trace();
