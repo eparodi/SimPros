@@ -1,6 +1,7 @@
 package tp2;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class TraceManager {
 	
@@ -45,6 +46,10 @@ public class TraceManager {
 	
 	public void setGantt(int rows, int cores, HashMap<Integer, Integer> truePositionsMap) {
 		gBuilder.setGantt(rows, cores, truePositionsMap, trace);
+	}
+
+	public void setInfo(ArrayList<String[]> matrixInfo) {
+		gBuilder.setInfo(matrixInfo);
 	}
 	
 	public void printGantt(String[][] infoMatrix) {

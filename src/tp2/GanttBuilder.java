@@ -1,4 +1,5 @@
 package tp2;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class GanttBuilder {
@@ -7,7 +8,9 @@ public class GanttBuilder {
 	private int cores;
 	private int cols;
 	private String[][] matrix;
+	private String[][] gantt;
 	private ArrayList<GanttLine> ganttLineArray;
+	private ArrayList<String[]> infoMatrix;
 	
 	public GanttBuilder() {
 		ganttLineArray = new ArrayList<>();
@@ -22,10 +25,61 @@ public class GanttBuilder {
 		this.cols = trace.getLineCount();
 		this.cores = cores;
 		matrix = new String[rows + cores][cols];
+		gantt = new String[rows + cores][cols + 3];		// 3 for the info columns.
 		trace.build(matrix, truePositionsMap);
 		completeWithSO();
+		finishGantt();
 	}
-	
+
+	public void setInfo(ArrayList<String[]> infoMatrix) {
+		this.infoMatrix = infoMatrix;
+	}
+
+	private void finishGantt() {
+		for (int row = 0; row < rows; row ++) {
+			for (int col = 0; col < 3; col ++) {
+				if (infoMatrix.get(row)[col] == null) {
+					String s = " ";
+					if (col == 1)
+						s = "      ";
+					if (col == 2)
+						s += " *";
+					gantt[row][col] = s;
+				}
+				else {
+					String s = infoMatrix.get(row)[col] + "";
+					if (col == 2)
+						s += " *";
+					gantt[row][col] = s;
+				}
+			}
+			for (int col = 0; col < cols; col ++) {
+				if (matrix[row][col] == null)
+					gantt[row][col + 3] = " ";
+				else
+					gantt[row][col + 3] = matrix[row][col] + "";
+			}
+		}
+		for (int row = rows; row < rows + cores; row ++) {
+			gantt[row][0] = " ";
+			gantt[row][1] = " ";
+			gantt[row][2] = "     SO *";
+			for (int col = 0; col < cols; col ++) {
+				if (matrix[row][col] == null)
+					gantt[row][col + 3] = " ";
+				else
+					gantt[row][col + 3] = matrix[row][col] + "";
+			}
+		}
+
+		for (int i = 0; i < rows + cores; i ++) {
+			for (int j = 0; j < cols + 3; j ++) {
+				System.out.print(gantt[i][j]);
+			}
+			System.out.println("");
+		}
+	}
+
 	public void printGantt(String[][] infoMatrix) {
 		for (int i = 0; i < rows; i ++) {
 			for (int k = 0; k < 3; k ++) {

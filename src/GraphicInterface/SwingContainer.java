@@ -76,7 +76,6 @@ class SwingContainer {
             try {
                 File f = fc.getSelectedFile();
                 Scheduler scheduler = Interpreter.jsonToProcess(f.getAbsolutePath());
-
             } catch (FileNotFoundException e) {
                 JOptionPane.showMessageDialog(component, "File format not recognized.");
             }

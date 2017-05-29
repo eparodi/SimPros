@@ -7,17 +7,22 @@ import tp2.Process;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 public class Interpreter {
 
     public static void main(String[] args){
-        for (int i = 1 ; i <= 30; i++){
+        for (int i = 1 ; i <= 1; i++){
             createRandomJSON("JSONExamples/example-"+i+".json");
             System.out.println("JSONExamples/example-"+i+".json");
             try {
-                jsonToProcess("JSONExamples/example-"+i+".json");
+                Scheduler scheduler = jsonToProcess("JSONExamples/example-"+i+".json");
+                TraceManager tManager = new TraceManager();
+                scheduler.run(tManager);
+                tManager.setInfo(scheduler.getInfoMatrix());
+                tManager.setGantt(scheduler.getInfoMatrix().size(), scheduler.getCores(), scheduler.getPositionsMap());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -46,6 +51,7 @@ public class Interpreter {
         }
         // Useful Gantt Info
         ArrayList<String[]> infoMatrix = new ArrayList<>();
+        HashMap<Integer, Integer> positionsMap = new HashMap<>();
 
         // Process
         JSONArray processes = data.getJSONArray("process");
@@ -65,6 +71,7 @@ public class Interpreter {
                 Integer kltId = klt.getInt("id");
                 if (klt.getBoolean("ult")){
                     rows --;
+                    positionsMap.put(kltId,rows);
                     Integer algorithm = klt.getInt("algorithm");
                     String info = "K ";
                     switch (algorithm) {
@@ -101,11 +108,13 @@ public class Interpreter {
                         JSONObject ult = (JSONObject) ultValue;
                         Integer arrivalTimeULT = ult.getInt("arrival_time");
                         Integer ultId = ult.getInt("id");
+                        positionsMap.put(ultId, rows - 1);
                         List<Task> tasks = getTasks(ult.getJSONArray("tasks"));
                         ultList.add(new UserLevelThread((ArrayList<Task>) tasks,ultId,arrivalTimeULT));
                     }
                     kltList.add(new KernelLevelThread((ArrayList<UserLevelThread>) ultList,algorithm,kltId,id));
                 }else{
+                    positionsMap.put(kltId,rows);
                     if (infoMatrix.size() <= rows)
                         infoMatrix.add(new String[3]);
                     infoMatrix.get(rows - 1)[1] = "K     ";
@@ -115,7 +124,9 @@ public class Interpreter {
             }
             processList.add(new tp2.Process((ArrayList<KernelLevelThread>) kltList,id,arrivalTime));
         }
-        return new Scheduler(cores, (ArrayList<Process>) processList,ioDevices, infoMatrix);
+        Scheduler scheduler = new Scheduler(cores, (ArrayList<Process>) processList,ioDevices);
+        scheduler.setInfo(infoMatrix, positionsMap);
+        return  scheduler;
     }
 
     private static List<Task> getTasks(JSONArray tasks){

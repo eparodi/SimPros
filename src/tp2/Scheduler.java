@@ -20,9 +20,10 @@ public class Scheduler {
 	private int timeCounter;
 	private Integer quantum;
 	private ArrayList<String[]> infoMatrix;
+	private HashMap<Integer, Integer> positionsMap;
 	
-	public Scheduler(ArrayList<Core> coresArray, ArrayList<Process> allProcesses, int deviceCount, Integer quantum, ArrayList<String[]> infoMatrix) {
-		this(coresArray, allProcesses, deviceCount, infoMatrix);
+	public Scheduler(ArrayList<Core> coresArray, ArrayList<Process> allProcesses, int deviceCount, Integer quantum) {
+		this(coresArray, allProcesses, deviceCount);
 		this.quantum = quantum;
 		quantumMap = new HashMap<>();
 		for (Process process : allProcesses) {
@@ -30,7 +31,7 @@ public class Scheduler {
 		}
 	}
 	
-	public Scheduler(ArrayList<Core> coresArray, ArrayList<Process> allProcesses, int deviceCount, ArrayList<String[]> infoMatrix) {
+	public Scheduler(ArrayList<Core> coresArray, ArrayList<Process> allProcesses, int deviceCount) {
 		this.infoMatrix = infoMatrix;
 		newProcessesArray = new ArrayList<>();
 		readyProcessesQueue = new LinkedList<>();
@@ -260,6 +261,19 @@ public class Scheduler {
 
 	public ArrayList<String[]> getInfoMatrix() {
 		return infoMatrix;
+	}
+
+	public void setInfo(ArrayList<String[]> infoMatrix, HashMap<Integer, Integer> positionsMap) {
+		this.infoMatrix = infoMatrix;
+		this.positionsMap = positionsMap;
+	}
+
+	public int getCores() {
+		return coresArray.size();
+	}
+
+	public HashMap<Integer, Integer> getPositionsMap() {
+		return positionsMap;
 	}
 	
 }
