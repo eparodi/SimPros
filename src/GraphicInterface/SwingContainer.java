@@ -130,8 +130,8 @@ public class SwingContainer {
         if ( data != null ){
             if ( index < data.length ) {
                 tableModel.addColumn(Integer.toString(index-3), data[index]);
-                tManager.printGanttLine(index - 3);
                 index++;
+                tManager.printGanttLine(index - 4);
             }
         }else{
             JOptionPane.showMessageDialog(fc, "Load a file please.");
@@ -142,7 +142,8 @@ public class SwingContainer {
         if ( data != null ){
             if ( index > 3 ){
                 index--;
-                tManager.printGanttLine(index - 3);
+                if (index - 4 >= 0)
+                    tManager.printGanttLine(index - 4);
                 tableModel.setColumnCount(index);
             }
         }else{
@@ -152,12 +153,10 @@ public class SwingContainer {
 
     private void play(){
         if ( data != null ){
-            for (int i = index ; i < data.length ; i++ ){
-                tableModel.addColumn(Integer.toString(i-3),data[i]);
+            for (; index < data.length ; index++ ) {
+                tableModel.addColumn(Integer.toString(index - 3), data[index]);
                 tManager.printGanttLine(index - 3);
-                index++;
             }
-            index = data.length;
         }else{
             JOptionPane.showMessageDialog(fc, "Load a file please.");
         }
