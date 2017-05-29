@@ -44,11 +44,16 @@ public class Interpreter {
         for (int i = 0 ; i < coreNumber ; i++){
             cores.add(new Core(i + 1));
         }
+        // Useful Gantt Info
+        ArrayList<String[]> infoMatrix = new ArrayList<>();
 
         // Process
         JSONArray processes = data.getJSONArray("process");
         List<tp2.Process> processList = new ArrayList<>();
         for (Object processValue : processes){
+            String[] s = new String[3];
+            s[0] = "P";
+            infoMatrix.add(s);
             JSONObject process = (JSONObject) processValue;
             Integer id = process.getInt("id");
             Integer arrivalTime = process.getInt("arrival_time");
@@ -61,9 +66,37 @@ public class Interpreter {
                 if (klt.getBoolean("ult")){
                     rows --;
                     Integer algorithm = klt.getInt("algorithm");
+                    String info = "K ";
+                    switch (algorithm) {
+                        case 0:
+                            info += "FIFO";
+                            break;
+                        case 1:
+                            Integer quantum = klt.getInt("quantum");
+                            if (quantum < 10)
+                                info += "RR " + quantum;
+                            else
+                                info += "RR" + quantum;
+                            break;
+                        case 2:
+                            info += "SPN ";
+                            break;
+                        case 3:
+                            info += "SRT ";
+                            break;
+                        default:
+                            info += "HRRN";
+                            break;
+                    }
+                    if (infoMatrix.size() <= rows)
+                        infoMatrix.add(new String[3]);
+                    infoMatrix.get(rows)[1] = info;
                     JSONArray ults = klt.getJSONArray("ults");
                     List<UserLevelThread> ultList = new ArrayList<>();
                     for (Object ultValue: ults){
+                        if (infoMatrix.size() <= rows)
+                            infoMatrix.add(new String[3]);
+                        infoMatrix.get(rows)[2] = "U";
                         rows ++;
                         JSONObject ult = (JSONObject) ultValue;
                         Integer arrivalTimeULT = ult.getInt("arrival_time");
@@ -73,13 +106,16 @@ public class Interpreter {
                     }
                     kltList.add(new KernelLevelThread((ArrayList<UserLevelThread>) ultList,algorithm,kltId,id));
                 }else{
+                    if (infoMatrix.size() <= rows)
+                        infoMatrix.add(new String[3]);
+                    infoMatrix.get(rows - 1)[1] = "K     ";
                     List<Task> tasks = getTasks(klt.getJSONArray("tasks"));
                     kltList.add(new KernelLevelThread((ArrayList<Task>) tasks,kltId,id));
                 }
             }
             processList.add(new tp2.Process((ArrayList<KernelLevelThread>) kltList,id,arrivalTime));
         }
-        return new Scheduler(cores, (ArrayList<Process>) processList,ioDevices);
+        return new Scheduler(cores, (ArrayList<Process>) processList,ioDevices, infoMatrix);
     }
 
     private static List<Task> getTasks(JSONArray tasks){
@@ -131,6 +167,10 @@ public class Interpreter {
                     klt.put("ult",true);
                     Integer algorithm = r.nextInt(5);
                     klt.put("algorithm",algorithm);
+                    if (algorithm == 1) {
+                        Integer quantum = r.nextInt(4) + 1;
+                        klt.put("quantum", quantum);
+                    }
                     Integer ultNumber = r.nextInt(4)+2;
                     JSONArray ults = new JSONArray();
                     int ultArrivalTime = 0;

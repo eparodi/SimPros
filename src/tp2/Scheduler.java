@@ -19,9 +19,10 @@ public class Scheduler {
 	private IoManager ioManager;
 	private int timeCounter;
 	private Integer quantum;
+	private ArrayList<String[]> infoMatrix;
 	
-	public Scheduler(ArrayList<Core> coresArray, ArrayList<Process> allProcesses, int deviceCount, Integer quantum) {
-		this(coresArray, allProcesses, deviceCount);
+	public Scheduler(ArrayList<Core> coresArray, ArrayList<Process> allProcesses, int deviceCount, Integer quantum, ArrayList<String[]> infoMatrix) {
+		this(coresArray, allProcesses, deviceCount, infoMatrix);
 		this.quantum = quantum;
 		quantumMap = new HashMap<>();
 		for (Process process : allProcesses) {
@@ -29,7 +30,8 @@ public class Scheduler {
 		}
 	}
 	
-	public Scheduler(ArrayList<Core> coresArray, ArrayList<Process> allProcesses, int deviceCount) {
+	public Scheduler(ArrayList<Core> coresArray, ArrayList<Process> allProcesses, int deviceCount, ArrayList<String[]> infoMatrix) {
+		this.infoMatrix = infoMatrix;
 		newProcessesArray = new ArrayList<>();
 		readyProcessesQueue = new LinkedList<>();
 		readyKltQueuesMap = new HashMap<>();
@@ -254,6 +256,10 @@ public class Scheduler {
 	
 	private boolean finished() {
 		return newProcessesArray.isEmpty() && readyProcessesQueue.isEmpty() && blockedProcessesMap.isEmpty() && runningProcessesArray.isEmpty();
+	}
+
+	public ArrayList<String[]> getInfoMatrix() {
+		return infoMatrix;
 	}
 	
 }
