@@ -77,6 +77,10 @@ public class KernelLevelThread {
 	public int getProcessID() {
 		return processID;
 	}
+
+	public ThreadLibrary getThreadLibrary() {
+		return this.threadLibrary;
+	}
 	
 	public void run(TraceElement element) {
 		if (taskArray == null) {

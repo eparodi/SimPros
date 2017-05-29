@@ -128,7 +128,8 @@ public class Scheduler {
 				}
 			}
 			tManager.insertLine();
-			GanttLine gLine = new GanttLine(readyProcessesQueue, runningProcessesArray, readyKltQueuesMap, ioManager.getBlockedQueues());
+			GanttLine gLine = new GanttLine(readyProcessesQueue, runningProcessesArray, readyKltQueuesMap, ioManager.getBlockedQueues(),
+					coresArray, coresQueuesMap);
 			tManager.insertGanttLine(gLine);
 			timeCounter ++;
 			/*

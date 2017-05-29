@@ -65,5 +65,9 @@ public class ThreadLibrary {
 			runningUlt.run();
 		}
 	}
+
+	public ArrayList<UserLevelThread> getUltArray() {
+		return algorithm.getUltArray();
+	}
 	
 }

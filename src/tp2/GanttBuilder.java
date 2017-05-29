@@ -79,7 +79,7 @@ public class GanttBuilder {
 	
 	public void printGanttLine(int index) {
 		System.out.println("Time : " + index);
-		ganttLineArray.get(index).printGanttLine();
+		ganttLineArray.get(index).print();
 	}
 
 	private void completeWithSO() {

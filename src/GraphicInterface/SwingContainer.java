@@ -23,6 +23,7 @@ class SwingContainer {
     private JPanel buttons = new JPanel(new FlowLayout());
     private DefaultTableModel tableModel;
     private JComboBox<String> algorithmsList;
+    private TraceManager tManager;
 
     void createAndShowGUI() {
         //Create and set up the window.
@@ -86,7 +87,7 @@ class SwingContainer {
                 }else{
                     scheduler = Interpreter.jsonToProcess(f.getAbsolutePath(), null);
                 }
-                TraceManager tManager = new TraceManager();
+                tManager = new TraceManager();
                 scheduler.run(tManager);
                 tManager.setInfo(scheduler.getInfoMatrix());
                 tManager.setGantt(scheduler.getInfoMatrix().size(), scheduler.getCores(), scheduler.getPositionsMap());
@@ -129,6 +130,7 @@ class SwingContainer {
         if ( data != null ){
             if ( index < data.length ) {
                 tableModel.addColumn(Integer.toString(index-3), data[index]);
+                tManager.printGanttLine(index);
                 index++;
             }
         }else{
@@ -140,6 +142,7 @@ class SwingContainer {
         if ( data != null ){
             if ( index > 3 ){
                 index--;
+                tManager.printGanttLine(index);
                 tableModel.setColumnCount(index);
             }
         }else{

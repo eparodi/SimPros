@@ -99,4 +99,9 @@ public class SRT implements Algorithm {
 			readyArray.add(index, ult);
 	}
 
+	@Override
+	public ArrayList<UserLevelThread> getUltArray() {
+		return readyArray;
+	}
+
 }

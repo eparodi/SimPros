@@ -70,5 +70,14 @@ public class RR implements Algorithm {
 			}
 		}
 	}
+
+	@Override
+	public ArrayList<UserLevelThread> getUltArray() {
+		ArrayList<UserLevelThread> ultArray = new ArrayList<>();
+		for (UserLevelThread ult : readyQueue) {
+			ultArray.add(ult);
+		}
+		return ultArray;
+	}
 	
 }

@@ -86,4 +86,9 @@ public class HRRN implements Algorithm {
 	@Override
 	public void updateNewUlts() {}
 
+	@Override
+	public ArrayList<UserLevelThread> getUltArray() {
+		return readyArray;
+	}
+
 }
