@@ -132,7 +132,7 @@ public class GanttLine {
 
         // Ready Processes Ults
         System.out.println("Ready Processes Ult Queues: ");
-        for (ArrayList<Integer> ultArray : readyProcessesKltsArrays) {
+        for (ArrayList<Integer> ultArray : readyProcessesUltsArrays) {
             printUlt(ultArray);
         }
         System.out.println("");
