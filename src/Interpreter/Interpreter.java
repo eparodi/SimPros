@@ -14,8 +14,9 @@ import java.util.Random;
 public class Interpreter {
 
     public static void main(String[] args){
-        for (int i = 1 ; i <= 30; i++){
-            createRandomJSON("JSONExamples/example-"+i+".json");
+        createRandomJSON("JSONExamples/checkListFinal.json");
+//        for (int i = 1 ; i <= 30; i++){
+//            createRandomJSON("JSONExamples/example-"+i+".json");
 //            System.out.println("JSONExamples/example-"+i+".json");
 //            try {
 //                Scheduler scheduler = jsonToProcess("JSONExamples/example-"+i+".json", null);
@@ -26,7 +27,7 @@ public class Interpreter {
 //            } catch (FileNotFoundException e) {
 //                e.printStackTrace();
 //            }
-        }
+//        }
 
     }
 
@@ -74,16 +75,17 @@ public class Interpreter {
                     rows --;
                     Integer algorithm = klt.getInt("algorithm");
                     String info = "K ";
+                    Integer quantumAlgorithm = 0;
                     switch (algorithm) {
                         case 0:
                             info += "FIFO";
                             break;
                         case 1:
-                            Integer quantum = klt.getInt("quantum");
-                            if (quantum < 10)
-                                info += "RR " + quantum;
+                            quantumAlgorithm = klt.getInt("quantum");
+                            if (quantumAlgorithm < 10)
+                                info += "RR " + quantumAlgorithm;
                             else
-                                info += "RR" + quantum;
+                                info += "RR" + quantumAlgorithm;
                             break;
                         case 2:
                             info += "SPN ";
@@ -113,7 +115,7 @@ public class Interpreter {
                         List<Task> tasks = getTasks(ult.getJSONArray("tasks"));
                         ultList.add(new UserLevelThread((ArrayList<Task>) tasks,ultId,arrivalTimeULT));
                     }
-                    kltList.add(new KernelLevelThread((ArrayList<UserLevelThread>) ultList,algorithm,kltId,id));
+                    kltList.add(new KernelLevelThread((ArrayList<UserLevelThread>) ultList,algorithm,quantumAlgorithm,kltId,id));
                 }else{
                     positionsMap.put(kltId, index);
                     index ++;
@@ -166,7 +168,8 @@ public class Interpreter {
         data.put("cores",2);
 
         JSONArray processes = new JSONArray();
-        int processNumber = r.nextInt(10) + 1;
+//        int processNumber = r.nextInt(10) + 1;
+        int processNumber = 10;
         int arrivalTime = 0;
 
         for (int i = 0 ; i < processNumber; i++){
@@ -176,20 +179,23 @@ public class Interpreter {
             process.put("arrival_time",arrivalTime);
             arrivalTime += r.nextInt(3);
 
-            int kltNumber = r.nextInt(5) + 1;
+//            int kltNumber = r.nextInt(5) + 1;
+            int kltNumber = r.nextInt(3)+1;
             JSONArray klts = new JSONArray();
             for (int j = 0 ; j < kltNumber ; j++ ){
                 JSONObject klt = new JSONObject();
                 klt.put("id", kltID++);
                 if(r.nextBoolean()){
                     klt.put("ult",true);
-                    Integer algorithm = r.nextInt(5);
+                    // Integer algorithm = r.nextInt(5);
+                    Integer algorithm = 1;
                     klt.put("algorithm",algorithm);
                     if (algorithm == 1) {
                         Integer quantum = r.nextInt(4) + 1;
                         klt.put("quantum", quantum);
                     }
-                    Integer ultNumber = r.nextInt(5) + 2;
+//                    Integer ultNumber = r.nextInt(5) + 2;
+                    Integer ultNumber = r.nextInt(3)+1;
                     JSONArray ults = new JSONArray();
                     int ultArrivalTime = 0;
                     for (int k = 0 ; k < ultNumber ; k++ ){

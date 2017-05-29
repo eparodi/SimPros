@@ -154,6 +154,8 @@ public class SwingContainer {
         if ( data != null ){
             for (int i = index ; i < data.length ; i++ ){
                 tableModel.addColumn(Integer.toString(i-3),data[i]);
+                tManager.printGanttLine(index - 3);
+                index++;
             }
             index = data.length;
         }else{

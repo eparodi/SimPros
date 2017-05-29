@@ -32,7 +32,6 @@ public class Scheduler {
 	}
 	
 	public Scheduler(ArrayList<Core> coresArray, ArrayList<Process> allProcesses, int deviceCount) {
-		this.infoMatrix = infoMatrix;
 		newProcessesArray = new ArrayList<>();
 		readyProcessesQueue = new LinkedList<>();
 		readyKltQueuesMap = new HashMap<>();
@@ -49,7 +48,7 @@ public class Scheduler {
 			readyKltQueuesMap.put(process.getID(), kltQueue);
 		}
 		this.coresArray = coresArray;
-		availableCoresQueue = new LinkedList<Core>();
+		availableCoresQueue = new LinkedList<>();
 		coresQueuesMap = new HashMap<>();
 		for (Core core : coresArray) {
 			coresQueuesMap.put(core.getID(), new LinkedList<>());
@@ -197,7 +196,6 @@ public class Scheduler {
 					iterator.remove();
 			}
 		}
-		return;
 	}
 	
 	private void updateCoreQueue(Core core) {
@@ -209,7 +207,6 @@ public class Scheduler {
 		else {
 			core.setRunningKlt(coreQueue.poll());
 		}
-		return;
 	}
 	
 	private void insertNewProcesses() {
