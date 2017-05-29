@@ -63,7 +63,7 @@ public class GanttBuilder {
 		for (int row = rows; row < rows + cores; row ++) {
 			gantt[row][0] = " ";
 			gantt[row][1] = " ";
-			gantt[row][2] = "     SO *";
+			gantt[row][2] = "    SO *";
 			for (int col = 0; col < cols; col ++) {
 				if (matrix[row][col] == null)
 					gantt[row][col + 3] = " ";
