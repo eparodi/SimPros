@@ -14,7 +14,7 @@ import java.util.Random;
 public class Interpreter {
 
     public static void main(String[] args){
-        for (int i = 1 ; i <= 1; i++){
+        for (int i = 1 ; i <= 30; i++){
             createRandomJSON("JSONExamples/example-"+i+".json");
             System.out.println("JSONExamples/example-"+i+".json");
             try {
@@ -52,6 +52,7 @@ public class Interpreter {
         // Useful Gantt Info
         ArrayList<String[]> infoMatrix = new ArrayList<>();
         HashMap<Integer, Integer> positionsMap = new HashMap<>();
+        Integer index = 0;
 
         // Process
         JSONArray processes = data.getJSONArray("process");
@@ -71,7 +72,6 @@ public class Interpreter {
                 Integer kltId = klt.getInt("id");
                 if (klt.getBoolean("ult")){
                     rows --;
-                    positionsMap.put(kltId,rows);
                     Integer algorithm = klt.getInt("algorithm");
                     String info = "K ";
                     switch (algorithm) {
@@ -108,13 +108,15 @@ public class Interpreter {
                         JSONObject ult = (JSONObject) ultValue;
                         Integer arrivalTimeULT = ult.getInt("arrival_time");
                         Integer ultId = ult.getInt("id");
-                        positionsMap.put(ultId, rows - 1);
+                        positionsMap.put(ultId, index);
+                        index ++;
                         List<Task> tasks = getTasks(ult.getJSONArray("tasks"));
                         ultList.add(new UserLevelThread((ArrayList<Task>) tasks,ultId,arrivalTimeULT));
                     }
                     kltList.add(new KernelLevelThread((ArrayList<UserLevelThread>) ultList,algorithm,kltId,id));
                 }else{
-                    positionsMap.put(kltId,rows);
+                    positionsMap.put(kltId, index);
+                    index ++;
                     if (infoMatrix.size() <= rows)
                         infoMatrix.add(new String[3]);
                     infoMatrix.get(rows - 1)[1] = "K     ";
@@ -164,7 +166,7 @@ public class Interpreter {
         data.put("cores",2);
 
         JSONArray processes = new JSONArray();
-        int processNumber = r.nextInt(15);
+        int processNumber = r.nextInt(10) + 1;
         int arrivalTime = 0;
 
         for (int i = 0 ; i < processNumber; i++){
@@ -172,7 +174,7 @@ public class Interpreter {
             JSONObject process = new JSONObject();
             process.put("id",id);
             process.put("arrival_time",arrivalTime);
-            arrivalTime += r.nextInt(5);
+            arrivalTime += r.nextInt(3);
 
             int kltNumber = r.nextInt(5) + 1;
             JSONArray klts = new JSONArray();
@@ -187,7 +189,7 @@ public class Interpreter {
                         Integer quantum = r.nextInt(4) + 1;
                         klt.put("quantum", quantum);
                     }
-                    Integer ultNumber = r.nextInt(4)+2;
+                    Integer ultNumber = r.nextInt(5) + 2;
                     JSONArray ults = new JSONArray();
                     int ultArrivalTime = 0;
                     for (int k = 0 ; k < ultNumber ; k++ ){
@@ -224,13 +226,13 @@ public class Interpreter {
         Random r = new Random();
         boolean cpu = true;
 
-        Integer taskNumber = r.nextInt(10) + 1;
+        Integer taskNumber = r.nextInt(8) + 1;
         if (taskNumber % 2 == 0){
             taskNumber += 1;
         }
         for (int i = 0 ; i < taskNumber ; i++ ){
             JSONObject task = new JSONObject();
-            Integer quantum = r.nextInt(10) + 1 ;
+            Integer quantum = r.nextInt(8) + 1 ;
             task.put("quantum",quantum);
             if (cpu){
                 cpu = false;

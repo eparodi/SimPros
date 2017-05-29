@@ -52,10 +52,6 @@ public class TraceManager {
 		gBuilder.setInfo(matrixInfo);
 	}
 	
-	public void printGantt(String[][] infoMatrix) {
-		gBuilder.printGantt(infoMatrix);
-	}
-	
 	public void printGanttLine(int index) {
 		gBuilder.printGanttLine(index);
 	}

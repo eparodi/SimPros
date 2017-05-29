@@ -47,13 +47,13 @@ public class GanttBuilder {
 					if (col == 1)
 						s = "      ";
 					if (col == 2)
-						s += " *";
+						s += "";
 					gantt[row][col] = s;
 				}
 				else {
 					String s = infoMatrix.get(row)[col] + "";
 					if (col == 2)
-						s += " *";
+						s += "";
 					gantt[row][col] = s;
 				}
 			}
@@ -65,55 +65,16 @@ public class GanttBuilder {
 			}
 		}
 		for (int row = rows; row < rows + cores; row ++) {
-			gantt[row][0] = " ";
-			gantt[row][1] = " ";
-			gantt[row][2] = "    SO *";
-			for (int col = 0; col < cols; col ++) {
-				if (matrix[row][col] == null)
-					gantt[row][col + 3] = " ";
-				else
-					gantt[row][col + 3] = matrix[row][col] + "";
-			}
-		}
-
-		for (int i = 0; i < rows + cores; i ++) {
-			for (int j = 0; j < cols + 3; j ++) {
-				System.out.print(gantt[i][j]);
-			}
-			System.out.println("");
-		}
-	}
-
-	public void printGantt(String[][] infoMatrix) {
-		for (int i = 0; i < rows; i ++) {
-			for (int k = 0; k < 3; k ++) {
-				if (infoMatrix[i][k] == null && k == 1)
-					System.out.print("      |");
-				else if (infoMatrix[i][k] == null)
-					System.out.print(" |");
-				else
-					System.out.print(infoMatrix[i][k] + "|");
-			}
-			System.out.print(" |*|");
-			for (int j = 0; j < cols; j ++) {
-				if (matrix[i][j] == null)
-					System.out.print(" |");
-				else
-					System.out.print(matrix[i][j] + "|");
-			}
-			System.out.println("");
-		}
-		for (int i = rows; i < rows + cores; i ++) {
-			System.out.print("        SO| |*|");
-			for (int j = 0; j < cols; j ++) {
-				if (matrix[i][j] == null)
-					System.out.print(" |");
-				else
-					System.out.print(matrix[i][j] + "|");
-			}
-			System.out.println("");
-		}
-		System.out.println("");
+            gantt[row][0] = " ";
+            gantt[row][1] = " ";
+            gantt[row][2] = "SO";
+            for (int col = 0; col < cols; col++) {
+                if (matrix[row][col] == null)
+                    gantt[row][col + 3] = " ";
+                else
+                    gantt[row][col + 3] = matrix[row][col] + "";
+            }
+        }
 	}
 	
 	public void printGanttLine(int index) {
