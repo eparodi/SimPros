@@ -1,14 +1,21 @@
 package GraphicInterface;
 
+import Interpreter.Interpreter;
+import tp2.Scheduler;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 class SwingContainer {
 
     private String[] columns = {};
     private String[][] data = {};
     private String[] algorithms = {"FIFO","HRRN"};
+    private final static JFileChooser fc = new JFileChooser();
 
     void createAndShowGUI() {
         //Create and set up the window.
@@ -32,28 +39,48 @@ class SwingContainer {
         JPanel buttons = new JPanel(new FlowLayout());
         mainFrame.getContentPane().add(buttons, BorderLayout.PAGE_END);
 
-        buttons.add(addButton("src/GraphicInterface/Images/NextButton.png"));
-        buttons.add(addButton("src/GraphicInterface/Images/PlayButton.png"));
-        buttons.add(addButton("src/GraphicInterface/Images/PreviousButton.png"));
+        buttons.add(addButton("src/GraphicInterface/Images/NextButton.png", e -> {
+            System.out.println("Hello");
+        }));
+        buttons.add(addButton("src/GraphicInterface/Images/PlayButton.png", e -> {
+            System.out.println("Hello");
+        }));
+        buttons.add(addButton("src/GraphicInterface/Images/PreviousButton.png", e -> {
+            System.out.println("Hello");
+        }));
 
 //        JPanel options = new JPanel(new FlowLayout());
 //        mainFrame.getContentPane().add(options, BorderLayout.LINE_END);
         JComboBox<String> algorithmsList = new JComboBox<>(algorithms);
 
-        buttons.add(new JButton("Load"));
-        buttons.add(new JButton("Generate GANTT"));
+        JButton loadButton = new JButton("Load");
+        loadButton.addActionListener(e -> loadButton(loadButton));
+        buttons.add(loadButton);
         buttons.add(algorithmsList);
 
         //Display the window.
         mainFrame.setVisible(true);
     }
 
-    private JButton addButton(String directory){
+    private JButton addButton(String directory, ActionListener runnable){
         ImageIcon icon = new ImageIcon(directory);
         JButton button = new JButton(icon);
         button.setPreferredSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-        button.addActionListener(e -> System.out.print("Hola"));
+        button.addActionListener(runnable);
         return button;
+    }
+
+    private static void loadButton(Component component){
+        int returnVal = fc.showOpenDialog(component);
+        if (returnVal == JFileChooser.APPROVE_OPTION){
+            try {
+                File f = fc.getSelectedFile();
+                Scheduler scheduler = Interpreter.jsonToProcess(f.getAbsolutePath());
+
+            } catch (FileNotFoundException e) {
+                JOptionPane.showMessageDialog(component, "File format not recognized.");
+            }
+        }
     }
 
 }
