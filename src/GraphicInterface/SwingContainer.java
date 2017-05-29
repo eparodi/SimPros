@@ -130,7 +130,7 @@ class SwingContainer {
         if ( data != null ){
             if ( index < data.length ) {
                 tableModel.addColumn(Integer.toString(index-3), data[index]);
-                tManager.printGanttLine(index);
+                tManager.printGanttLine(index - 3);
                 index++;
             }
         }else{
@@ -142,7 +142,7 @@ class SwingContainer {
         if ( data != null ){
             if ( index > 3 ){
                 index--;
-                tManager.printGanttLine(index);
+                tManager.printGanttLine(index - 3);
                 tableModel.setColumnCount(index);
             }
         }else{

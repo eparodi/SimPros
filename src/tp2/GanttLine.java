@@ -110,7 +110,7 @@ public class GanttLine {
         }
 
         // Running Processes Ults
-        System.out.println("Running Processes Ult Queues");
+        System.out.println("Running Processes Ult Queues: ");
         for (ArrayList<Integer> ultArray : runningProcessesUltsArrays) {
             printUlt(ultArray);
         }
@@ -131,21 +131,21 @@ public class GanttLine {
         }
 
         // Ready Processes Ults
-        System.out.println("Ready Processes Ult Queues");
+        System.out.println("Ready Processes Ult Queues: ");
         for (ArrayList<Integer> ultArray : readyProcessesKltsArrays) {
             printUlt(ultArray);
         }
         System.out.println("");
 
         // Cores Klts
-        System.out.println("Cores Klt Queues");
+        System.out.println("Cores Klt Queues: ");
         for (ArrayList<Integer> kltArray : coresKltsArrays) {
             printKlt(kltArray);
         }
         System.out.println("");
 
         // Devices Klts
-        System.out.println("Devices Klt Queues");
+        System.out.println("Devices Klt Queues: ");
         for (ArrayList<Integer> kltArray : devicesKltsArrays) {
             printKlt(kltArray);
         }
